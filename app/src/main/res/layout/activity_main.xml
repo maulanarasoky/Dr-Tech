@@ -4,7 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <View
         android:id="@+id/bottomNavigationView"
@@ -33,19 +42,19 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:layout_constraintEnd_toEndOf="@id/bottomNavigationView"
+        app:layout_constraintStart_toStartOf="@id/bottomNavigationView"
         app:layout_constraintTop_toTopOf="@id/bottomNavigationView"
         app:layout_constraintBottom_toBottomOf="@id/bottomNavigationView"
-        android:layout_marginEnd="32dp"
-        android:src="@drawable/ic_profile_gray" />
+        android:src="@drawable/ic_add_gray" />
 
     <ImageView
         android:id="@+id/profile"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:layout_constraintEnd_toEndOf="@id/bottomNavigationView"
-        app:layout_constraintStart_toStartOf="@id/bottomNavigationView"
         app:layout_constraintTop_toTopOf="@id/bottomNavigationView"
         app:layout_constraintBottom_toBottomOf="@id/bottomNavigationView"
-        android:src="@drawable/ic_add_gray" />
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/ic_profile_gray" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
