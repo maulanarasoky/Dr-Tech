@@ -35,6 +35,7 @@ dependencies {
 
     implementation 'com.android.support:design:29.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.synnapps:carouselview:0.1.5'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
