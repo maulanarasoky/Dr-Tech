@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "516455347179",
+    "firebase_url": "https://dr-tech-telu.firebaseio.com",
+    "project_id": "dr-tech-telu",
+    "storage_bucket": "dr-tech-telu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516455347179:android:c59325cbd8c7bf9aac1fae",
+        "android_client_info": {
+          "package_name": "com.example.drtech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516455347179-sbl2svhsu98c77gt5j9np3u9cucoobjh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvx-jvh_u7pohr3puk_qyPXALuX20gmDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516455347179-sbl2svhsu98c77gt5j9np3u9cucoobjh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

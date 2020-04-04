@@ -31,6 +31,8 @@ class Home : Fragment() {
 
         carouselView.pageCount = images.size
         carouselView.setImageListener(imageListener)
+
+
     }
 
     private val imageListener = ImageListener { position, imageView -> imageView.setImageResource(images[position]) }
