@@ -8,8 +8,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userPic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:src="@drawable/ic_user"
@@ -19,9 +19,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:fontFamily="@font/firasans"
-        android:text="Hi, User"
+        android:text="Hi Maulana"
         android:textColor="@android:color/black"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/userPic"
@@ -29,8 +29,8 @@
         app:layout_constraintTop_toTopOf="@id/userPic" />
 
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_search_black"
         app:layout_constraintBottom_toBottomOf="@id/userPic"
@@ -40,16 +40,16 @@
     <com.synnapps.carouselview.CarouselView
         android:id="@+id/carouselView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         app:fillColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="@id/userPic"
         app:layout_constraintStart_toStartOf="@id/userPic"
         app:layout_constraintTop_toBottomOf="@id/userPic"
         app:pageColor="#00000000"
-        app:radius="5dp"
+        app:radius="3dp"
         app:slideInterval="3000"
         app:strokeColor="#FF777777"
         app:strokeWidth="1dp" />
@@ -63,8 +63,8 @@
         app:layout_constraintEnd_toStartOf="@id/allSpecialists"
         android:orientation="vertical"
         android:background="@drawable/background_forum_specialist"
-        android:padding="16dp"
-        android:layout_marginTop="8dp">
+        android:padding="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <ImageView
             android:layout_width="50dp"
@@ -93,8 +93,8 @@
         android:background="@drawable/background_forum_specialist"
         app:layout_constraintStart_toEndOf="@id/allForums"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_marginTop="8dp">
+        android:padding="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <ImageView
             android:layout_width="50dp"
@@ -113,5 +113,55 @@
             android:fontFamily="@font/firasans" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/titleForum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/allForums"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="Forum (Terbaik)"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:fontFamily="@font/firasans"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/forumRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@id/titleForum"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+    <TextView
+        android:id="@+id/titleSpecialist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/forumRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="Specialist (Terbaik)"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:fontFamily="@font/firasans"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/specialistRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@id/titleSpecialist"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
