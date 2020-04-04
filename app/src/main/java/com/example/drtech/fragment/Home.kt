@@ -92,7 +92,7 @@ class Home : Fragment(), MyAsyncCallback {
         var count = 1
         listForums.clear()
         for(data in dataSnapshot.children){
-            val x = Forum(data.child(count.toString()).child("id").value.toString(), dataSnapshot.child(count.toString()).child("title").value.toString(), dataSnapshot.child(count.toString()).child("description").value.toString(), dataSnapshot.child(count.toString()).child("views").value.toString())
+            val x = Forum(data.child(count.toString()).child("id").value.toString(), dataSnapshot.child(count.toString()).child("title").value.toString(), dataSnapshot.child(count.toString()).child("description").value.toString(), dataSnapshot.child(count.toString()).child("category").value.toString(), dataSnapshot.child(count.toString()).child("tags").value.toString(), dataSnapshot.child(count.toString()).child("views").value.toString())
             listForums.add(x)
             count++
         }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
@@ -33,6 +34,14 @@ class AddForum : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         database = FirebaseDatabase.getInstance().reference
 
+        activity?.applicationContext?.let {
+            ArrayAdapter.createFromResource(it, R.array.forumCategory, R.layout.spinner_item)
+                .also { adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    forumCategory.adapter = adapter
+                }
+        }
+
         countChildren()
 
         submit.setOnClickListener {
@@ -40,8 +49,8 @@ class AddForum : Fragment() {
                 forumTitle.error = "Judul tidak boleh kosong"
                 return@setOnClickListener
             }
-            if (TextUtils.isEmpty(forumDesc.text.toString())){
-                forumDesc.error = "Deskripsi tidak boleh kosong"
+            if (TextUtils.isEmpty(forumDescription.text.toString())){
+                forumDescription.error = "Deskripsi tidak boleh kosong"
                 return@setOnClickListener
             }
             addForum()
@@ -67,7 +76,7 @@ class AddForum : Fragment() {
 
     private fun addForum(){
         val id = database.push().key
-        val data = Forum(id, forumTitle.text.toString(), forumDesc.text.toString(), "0", )
+        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), forumCategory.selectedItem.toString(), forumTags.text.toString(), "0")
         database.child("Forums").child((count + 1).toString()).setValue(data)
         count++
         clear()
@@ -76,7 +85,7 @@ class AddForum : Fragment() {
 
     private fun clear(){
         forumTitle.setText("")
-        forumDesc.setText("")
+        forumDescription.setText("")
     }
 
     private fun showAlert(title: String){
