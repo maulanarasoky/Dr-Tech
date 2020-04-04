@@ -10,8 +10,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
 import com.example.drtech.model.Forum
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_add_forum.*
 
 /**
@@ -20,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_add_forum.*
 class AddForum : Fragment() {
 
     lateinit var database: DatabaseReference
+    var count = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +32,8 @@ class AddForum : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         database = FirebaseDatabase.getInstance().reference
+
+        countChildren()
 
         submit.setOnClickListener {
             if(TextUtils.isEmpty(forumTitle.text.toString())){
@@ -50,10 +52,24 @@ class AddForum : Fragment() {
         }
     }
 
+    private fun countChildren(){
+        database.child("Forums").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                count = p0.childrenCount.toInt()
+            }
+
+        })
+    }
+
     private fun addForum(){
         val id = database.push().key
-        val data = Forum(id, forumTitle.text.toString(), forumDesc.text.toString(), 0)
-        database.child("Forums").child(id.toString()).setValue(data)
+        val data = Forum(id, forumTitle.text.toString(), forumDesc.text.toString(), "0", )
+        database.child("Forums").child((count + 1).toString()).setValue(data)
+        count++
         clear()
         showAlert("Forum berhasil dibuat")
     }
@@ -64,7 +80,8 @@ class AddForum : Fragment() {
     }
 
     private fun showAlert(title: String){
-        val dialog = SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+        val dialog = SweetAlertDialog(context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+        dialog.setCustomImage(R.drawable.ic_success_alert)
         dialog.titleText = title
         dialog.setCancelable(false)
         dialog.show()
