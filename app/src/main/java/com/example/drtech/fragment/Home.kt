@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -103,6 +104,7 @@ class Home : Fragment(), MyAsyncCallback {
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         forumRecyclerView.layoutManager = layoutManager
+        forumRecyclerView.addItemDecoration(DividerItemDecoration(forumRecyclerView.context, DividerItemDecoration.VERTICAL))
         forumRecyclerView.adapter = adapter
     }
 

@@ -10,6 +10,7 @@ import com.example.drtech.fragment.AddForum
 import com.example.drtech.fragment.Home
 import com.example.drtech.fragment.Profile
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity() {
 
         profile.setOnClickListener {
             checkColor(profile)
-            loadProfileFragment()
+//            loadProfileFragment()
+            startActivity<Login>()
             profileState = true
         }
     }

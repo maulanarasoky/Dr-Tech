@@ -43,6 +43,9 @@ dependencies {
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
+    // Appcompat-v7 (hanya Anko Commons)
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
+
     implementation 'com.google.firebase:firebase-database:19.2.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
