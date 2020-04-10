@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.drtech.R
+import com.example.drtech.activity.Login
 import com.example.drtech.adapter.ForumsList
 import com.example.drtech.interfaces.MyAsyncCallback
 import com.example.drtech.model.Forum
@@ -19,6 +20,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
 import com.synnapps.carouselview.ImageListener
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.jetbrains.anko.support.v4.startActivity
 import java.lang.ref.WeakReference
 
 /**
@@ -47,6 +49,10 @@ class Home : Fragment(), MyAsyncCallback {
         database = FirebaseDatabase.getInstance().reference
 
         initCarousel()
+
+        search_bar.setOnClickListener {
+            startActivity<Login>()
+        }
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         forumRecyclerView.layoutManager = layoutManager

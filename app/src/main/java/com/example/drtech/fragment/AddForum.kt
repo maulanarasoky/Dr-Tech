@@ -22,6 +22,10 @@ class AddForum : Fragment() {
     lateinit var database: DatabaseReference
     var count = 0
 
+    var checkLaptop = false
+    var checkPhone = false
+    var checkComputer = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +39,18 @@ class AddForum : Fragment() {
         database = FirebaseDatabase.getInstance().reference
 
         countChildren()
+
+        laptop.setOnClickListener {
+
+        }
+
+        smartphone.setOnClickListener {
+
+        }
+
+        computer.setOnClickListener {
+
+        }
 
         submit.setOnClickListener {
             if(TextUtils.isEmpty(forumTitle.text.toString())){
@@ -51,6 +67,10 @@ class AddForum : Fragment() {
         clear.setOnClickListener {
             clear()
         }
+    }
+
+    private fun check(){
+
     }
 
     private fun countChildren(){

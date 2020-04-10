@@ -52,39 +52,79 @@
             app:layout_constraintTop_toTopOf="@id/userPic" />
 
         <TextView
+            android:id="@+id/greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selamat Pagi"
+            app:layout_constraintTop_toTopOf="@id/userPic"
+            app:layout_constraintStart_toEndOf="@id/userPic"
+            android:fontFamily="@font/firasans"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@id/userName" />
+
+        <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/firasans"
-            android:text="Hi Maulana"
+            android:text="Maulana"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/userPic"
             app:layout_constraintStart_toEndOf="@id/userPic"
-            app:layout_constraintTop_toTopOf="@id/userPic" />
+            app:layout_constraintTop_toBottomOf="@id/greeting" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_notifications_white"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_search_white"
-            app:layout_constraintBottom_toBottomOf="@id/userPic"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/background_forum_specialist"
+            android:padding="@dimen/activity_vertical_margin"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/userPic" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userPic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/search_bar"
+            app:layout_constraintStart_toStartOf="@id/search_bar"
+            app:layout_constraintBottom_toBottomOf="@id/search_bar"
+            android:text="Searching"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:fontFamily="@font/firasans"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
 
         <com.synnapps.carouselview.CarouselView
             android:id="@+id/carouselView"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             app:fillColor="#FFFFFFFF"
-            android:layout_marginTop="48dp"
-            app:layout_constraintBottom_toBottomOf="@id/toolBar"
-            app:layout_constraintEnd_toEndOf="@id/toolBar"
-            app:layout_constraintStart_toStartOf="@id/toolBar"
-            app:layout_constraintTop_toBottomOf="@id/userPic"
+            app:layout_constraintBottom_toTopOf="@id/allForums"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolBar"
             app:pageColor="#00000000"
             app:radius="3dp"
             app:slideInterval="3000"
@@ -156,7 +196,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:fontFamily="@font/firasans"
             android:text="Forum (Top 5)"
             android:textColor="@android:color/black"
