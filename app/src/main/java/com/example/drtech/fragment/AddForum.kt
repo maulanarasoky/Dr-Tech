@@ -34,14 +34,6 @@ class AddForum : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         database = FirebaseDatabase.getInstance().reference
 
-        activity?.applicationContext?.let {
-            ArrayAdapter.createFromResource(it, R.array.forumCategory, R.layout.spinner_item)
-                .also { adapter ->
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    forumCategory.adapter = adapter
-                }
-        }
-
         countChildren()
 
         submit.setOnClickListener {
@@ -76,7 +68,7 @@ class AddForum : Fragment() {
 
     private fun addForum(){
         val id = database.push().key
-        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), forumCategory.selectedItem.toString(), forumTags.text.toString(), "0")
+        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), "", forumTags.text.toString(), "0")
         database.child("Forums").child(id.toString()).setValue(data)
         count++
         clear()
