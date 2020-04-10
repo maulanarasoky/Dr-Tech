@@ -4,19 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
+import com.example.drtech.model.Users
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.startActivity
 
 class Register : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
+    lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
         btnRegister.setOnClickListener {
             registerAccount(email.text.toString(), password.text.toString())
@@ -40,6 +45,8 @@ class Register : AppCompatActivity() {
                         dialog.contentText = "Silahkan lakukan verifikasi"
                         dialog.setConfirmClickListener {
                             dialog.dismissWithAnimation()
+                            addAccountToDatabase(auth.currentUser?.uid.toString())
+                            auth.signOut()
                             startActivity<Login>()
                             this.finish()
                         }
@@ -51,5 +58,11 @@ class Register : AppCompatActivity() {
             }
         }
         dialog.show()
+    }
+
+    private fun addAccountToDatabase(idUser: String?){
+        val id = database.push().key
+        val data = Users(idUser, "Regular", "-")
+        database.child("Users").child(id.toString()).setValue(data)
     }
 }

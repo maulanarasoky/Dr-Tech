@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_add_forum.*
 class AddForum : Fragment() {
 
     lateinit var database: DatabaseReference
-    var count = 0
 
     var laptopState = false
     var phoneState = false
@@ -50,8 +49,6 @@ class AddForum : Fragment() {
 
         check(laptop)
         laptopState = true
-
-        countChildren()
 
         laptop.setOnClickListener {
             check(laptop)
@@ -118,19 +115,6 @@ class AddForum : Fragment() {
         title.setTextColor(resources.getColor(android.R.color.white))
     }
 
-    private fun countChildren(){
-        database.child("Forums").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                count = p0.childrenCount.toInt()
-            }
-
-        })
-    }
-
     private fun addForum(){
         val id = database.push().key
         var category = ""
@@ -141,9 +125,8 @@ class AddForum : Fragment() {
         }else if(computerState == true){
             category = "Komputer"
         }
-        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), category, forumTags.text.toString(), "0")
+        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), category, forumTags.text.toString(), "0", auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
-        count++
         clear()
         showAlert("Forum berhasil dibuat")
     }
@@ -151,6 +134,7 @@ class AddForum : Fragment() {
     private fun clear(){
         forumTitle.setText("")
         forumDescription.setText("")
+        forumTags.setText("")
     }
 
     private fun showAlert(title: String){

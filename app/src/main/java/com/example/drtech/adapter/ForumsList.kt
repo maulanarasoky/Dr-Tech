@@ -40,7 +40,7 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
                 photo = R.drawable.ic_laptop
             }else if(items.category == "Komputer"){
                 photo = R.drawable.ic_computer
-            }else if(items.category == "Smartphone"){
+            }else if(items.category == "Hp"){
                 photo = R.drawable.ic_smartphone
             }
 
