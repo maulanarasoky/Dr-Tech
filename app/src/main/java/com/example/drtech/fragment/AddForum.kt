@@ -6,7 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
@@ -22,9 +23,9 @@ class AddForum : Fragment() {
     lateinit var database: DatabaseReference
     var count = 0
 
-    var checkLaptop = false
-    var checkPhone = false
-    var checkComputer = false
+    var laptopState = false
+    var phoneState = false
+    var computerState = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +42,18 @@ class AddForum : Fragment() {
         countChildren()
 
         laptop.setOnClickListener {
-
+            check(laptop)
+            laptopState = true
         }
 
         smartphone.setOnClickListener {
-
+            check(smartphone)
+            phoneState = true
         }
 
         computer.setOnClickListener {
-
+            check(computer)
+            computerState = true
         }
 
         submit.setOnClickListener {
@@ -69,8 +73,37 @@ class AddForum : Fragment() {
         }
     }
 
-    private fun check(){
+    private fun check(view: LinearLayout){
+        if(laptopState == true){
+            laptop.background = resources.getDrawable(R.drawable.background_forum_specialist)
+            laptopTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            laptopState = false
+        }
 
+        if(phoneState == true){
+            smartphone.background = resources.getDrawable(R.drawable.background_forum_specialist)
+            smartphoneTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            phoneState = false
+        }
+
+        if(computerState == true){
+            computer.background = resources.getDrawable(R.drawable.background_forum_specialist)
+            computerTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            computerState = false
+        }
+
+        var title: TextView = laptopTitle
+
+        if(view.id == R.id.laptop){
+            title = laptopTitle
+        }else if(view.id == R.id.smartphone){
+            title = smartphoneTitle
+        }else if(view.id == R.id.computer){
+            title = computerTitle
+        }
+
+        view.background = resources.getDrawable(R.drawable.background_button_login_register)
+        title.setTextColor(resources.getColor(android.R.color.white))
     }
 
     private fun countChildren(){
