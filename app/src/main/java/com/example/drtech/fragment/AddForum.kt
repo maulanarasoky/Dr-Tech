@@ -77,7 +77,7 @@ class AddForum : Fragment() {
     private fun addForum(){
         val id = database.push().key
         val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), forumCategory.selectedItem.toString(), forumTags.text.toString(), "0")
-        database.child("Forums").child((count + 1).toString()).setValue(data)
+        database.child("Forums").child(id.toString()).setValue(data)
         count++
         clear()
         showAlert("Forum berhasil dibuat")

@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/forumPic"
@@ -25,11 +25,21 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:fontFamily="@font/firasans"
         android:text="Title"
-        android:maxLines="3"
+        android:maxLines="2"
         android:textColor="@android:color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/forumPic"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_tag"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_tag"
+        app:layout_constraintTop_toBottomOf="@id/forumTitle"
+        app:layout_constraintStart_toEndOf="@id/forumPic"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/forumTags"
@@ -38,12 +48,22 @@
         android:layout_gravity="start"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/firasans"
-        android:text="Tag : Laptop"
+        android:text="Laptop"
         android:textColor="@android:color/black"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/forumPic" />
+        app:layout_constraintStart_toEndOf="@id/ic_tag"
+        app:layout_constraintTop_toBottomOf="@id/forumTitle"
+        android:layout_marginStart="8dp"/>
+
+    <ImageView
+        android:id="@+id/ic_views"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_views"
+        app:layout_constraintTop_toBottomOf="@id/ic_tag"
+        app:layout_constraintStart_toEndOf="@id/forumPic"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/forumViews"
@@ -51,12 +71,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/firasans"
-        android:text="Dilihat : 0"
+        android:text="0"
         android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/forumPic" />
+        app:layout_constraintStart_toEndOf="@id/ic_views"
+        app:layout_constraintTop_toBottomOf="@id/forumTags" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

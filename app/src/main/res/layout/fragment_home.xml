@@ -93,8 +93,8 @@
 
         <LinearLayout
             android:id="@+id/allForums"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@drawable/background_forum_specialist"
             android:orientation="vertical"
@@ -104,8 +104,8 @@
             app:layout_constraintTop_toBottomOf="@id/carouselView">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_forum" />
 
@@ -123,8 +123,8 @@
 
         <LinearLayout
             android:id="@+id/allSpecialists"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@drawable/background_forum_specialist"
             android:orientation="vertical"
@@ -134,8 +134,8 @@
             app:layout_constraintTop_toBottomOf="@id/carouselView">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_technician" />
 

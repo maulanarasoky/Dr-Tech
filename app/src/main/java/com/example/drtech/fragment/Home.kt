@@ -48,8 +48,15 @@ class Home : Fragment(), MyAsyncCallback {
 
         initCarousel()
 
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+        forumRecyclerView.layoutManager = layoutManager
+        forumRecyclerView.addItemDecoration(DividerItemDecoration(forumRecyclerView.context, DividerItemDecoration.VERTICAL))
+
         HomeAsync(this).execute()
 
+        adapter = ForumsList(listForums)
+
+        forumRecyclerView.adapter = adapter
     }
 
     private fun initCarousel(){
@@ -93,19 +100,12 @@ class Home : Fragment(), MyAsyncCallback {
         var count = 1
         listForums.clear()
         for(data in dataSnapshot.children){
-            val x = Forum(data.child(count.toString()).child("id").value.toString(), dataSnapshot.child(count.toString()).child("title").value.toString(), dataSnapshot.child(count.toString()).child("description").value.toString(), dataSnapshot.child(count.toString()).child("category").value.toString(), dataSnapshot.child(count.toString()).child("tags").value.toString(), dataSnapshot.child(count.toString()).child("views").value.toString())
+            val post = data.getValue(Forum::class.java)
+            val x = Forum(dataSnapshot.child(post?.id.toString()).child("id").value.toString(), dataSnapshot.child(post?.id.toString()).child("title").value.toString(), dataSnapshot.child(post?.id.toString()).child("description").value.toString(), dataSnapshot.child(post?.id.toString()).child("category").value.toString(), dataSnapshot.child(post?.id.toString()).child("tags").value.toString(), dataSnapshot.child(post?.id.toString()).child("views").value.toString())
             listForums.add(x)
             count++
         }
-
-        Log.d("JUMLAH ARRAY", listForums.size.toString())
-
-        adapter = ForumsList(listForums)
-
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
-        forumRecyclerView.layoutManager = layoutManager
-        forumRecyclerView.addItemDecoration(DividerItemDecoration(forumRecyclerView.context, DividerItemDecoration.VERTICAL))
-        forumRecyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     inner class HomeAsync(listener: MyAsyncCallback): AsyncTask<Void, Unit, Unit>(){
