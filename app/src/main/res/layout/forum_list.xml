@@ -12,7 +12,6 @@
         android:id="@+id/forumPic"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@color/twitterColour"
         android:padding="4dp"
         app:layout_constraintEnd_toStartOf="@id/forumTitle"
         app:layout_constraintStart_toStartOf="parent"

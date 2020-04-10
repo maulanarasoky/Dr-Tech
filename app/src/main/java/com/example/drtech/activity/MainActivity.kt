@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             profileState = false
         }
 
-        DrawableCompat.setTint(DrawableCompat.wrap(view.drawable), Color.parseColor("#1DA1F2"))
+        DrawableCompat.setTint(DrawableCompat.wrap(view.drawable), resources.getColor(R.color.twitterColour))
     }
 
     private fun loadHomeFragment(){
