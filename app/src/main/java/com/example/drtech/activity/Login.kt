@@ -28,6 +28,10 @@ class Login : AppCompatActivity() {
             startActivityForResult(intent, MainActivity.checkLogin)
             this.finish()
         }
+
+        forgotPass.setOnClickListener {
+            startActivity<ForgotPassword>()
+        }
     }
 
     private fun login(email: String, password: String) {
