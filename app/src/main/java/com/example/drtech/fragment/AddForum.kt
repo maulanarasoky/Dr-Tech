@@ -1,5 +1,6 @@
 package com.example.drtech.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -11,7 +12,10 @@ import android.widget.TextView
 import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
+import com.example.drtech.activity.Login
+import com.example.drtech.activity.MainActivity
 import com.example.drtech.model.Forum
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_add_forum.*
 
@@ -27,6 +31,8 @@ class AddForum : Fragment() {
     var phoneState = false
     var computerState = false
 
+    lateinit var auth: FirebaseAuth
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +43,13 @@ class AddForum : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+
         database = FirebaseDatabase.getInstance().reference
+
+        check(laptop)
+        laptopState = true
 
         countChildren()
 
@@ -121,7 +133,15 @@ class AddForum : Fragment() {
 
     private fun addForum(){
         val id = database.push().key
-        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), "", forumTags.text.toString(), "0")
+        var category = ""
+        if(laptopState == true){
+            category = "Laptop"
+        }else if(phoneState == true){
+            category = "Hp"
+        }else if(computerState == true){
+            category = "Komputer"
+        }
+        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), category, forumTags.text.toString(), "0")
         database.child("Forums").child(id.toString()).setValue(data)
         count++
         clear()

@@ -1,26 +1,37 @@
 package com.example.drtech.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.core.graphics.drawable.DrawableCompat
 import com.example.drtech.R
 import com.example.drtech.fragment.AddForum
 import com.example.drtech.fragment.Home
 import com.example.drtech.fragment.Profile
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
-    var homeState = false
-    var addState = false
-    var profileState = false
+    companion object {
+        const val checkLogin = 100
+        var homeState = false
+        var addState = false
+        var profileState = false
+    }
+
+    lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        auth = FirebaseAuth.getInstance()
 
         checkColor(home)
         loadHomeFragment()
@@ -33,16 +44,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         addForum.setOnClickListener {
-            checkColor(addForum)
-            loadAddForumFragment()
-            addState = true
+            if(auth.currentUser == null){
+                val intent = Intent(this, Login::class.java)
+                startActivityForResult(intent, checkLogin)
+                homeState = true
+            }else{
+                checkColor(addForum)
+                loadAddForumFragment()
+                addState = true
+            }
         }
 
         profile.setOnClickListener {
-            checkColor(profile)
-//            loadProfileFragment()
-            startActivity<Login>()
-            profileState = true
+            if(auth.currentUser == null){
+                val intent = Intent(this, Login::class.java)
+                startActivityForResult(intent, checkLogin)
+                homeState = true
+            }else{
+                checkColor(profile)
+                loadProfileFragment()
+                profileState = true
+            }
         }
     }
 
@@ -84,5 +106,16 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.container_layout, Profile(), Profile::class.java.simpleName)
             .commit()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("REQUEST CODE", requestCode.toString())
+        Log.d("RESULT CODE", resultCode.toString())
+        if (requestCode == checkLogin){
+            checkColor(home)
+            loadHomeFragment()
+            homeState = true
+        }
     }
 }
