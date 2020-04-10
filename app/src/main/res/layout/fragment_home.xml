@@ -10,16 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
@@ -43,9 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/firasans"
-            android:text="M"
             android:textColor="@android:color/white"
             android:textSize="18sp"
+            android:text="DR"
             app:layout_constraintBottom_toBottomOf="@id/userPic"
             app:layout_constraintEnd_toEndOf="@id/userPic"
             app:layout_constraintStart_toStartOf="@id/userPic"
@@ -55,7 +45,7 @@
             android:id="@+id/greeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Selamat Pagi"
+            android:text="Selamat Datang"
             app:layout_constraintTop_toTopOf="@id/userPic"
             app:layout_constraintStart_toEndOf="@id/userPic"
             android:fontFamily="@font/firasans"
@@ -70,14 +60,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/firasans"
-            android:text="Maulana"
             android:textColor="@android:color/white"
+            android:text="Loading..."
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/userPic"
             app:layout_constraintStart_toEndOf="@id/userPic"
             app:layout_constraintTop_toBottomOf="@id/greeting" />
 
         <ImageView
+            android:id="@+id/notifications"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_notifications_white"
@@ -93,7 +84,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/background_forum_specialist"
+            android:background="@drawable/background_search_bar"
             android:padding="@dimen/activity_vertical_margin"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp"
@@ -102,6 +93,7 @@
             app:layout_constraintTop_toBottomOf="@id/userPic" />
 
         <TextView
+            android:id="@+id/textSearching"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/search_bar"

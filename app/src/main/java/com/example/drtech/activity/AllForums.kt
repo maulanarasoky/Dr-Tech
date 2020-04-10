@@ -1,73 +1,37 @@
-package com.example.drtech.fragment
+package com.example.drtech.activity
 
 import android.os.AsyncTask
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
-import com.example.drtech.activity.AllForums
-import com.example.drtech.activity.Login
 import com.example.drtech.adapter.ForumsList
 import com.example.drtech.interfaces.MyAsyncCallback
 import com.example.drtech.model.Forum
-import com.example.drtech.model.Users
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.synnapps.carouselview.ImageListener
-import kotlinx.android.synthetic.main.fragment_home.*
-import org.jetbrains.anko.support.v4.startActivity
+import kotlinx.android.synthetic.main.activity_all_forums.*
 import java.lang.ref.WeakReference
 
-/**
- * A simple [Fragment] subclass.
- */
-class Home : Fragment(), MyAsyncCallback {
+class AllForums : AppCompatActivity(), MyAsyncCallback {
 
-    val images = intArrayOf(R.drawable.sample1, R.drawable.sample2, R.drawable.sample3)
-
-    lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference
     private lateinit var adapter: ForumsList
 
     var listForums: MutableList<Forum> = mutableListOf()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        auth = FirebaseAuth.getInstance()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_all_forums)
         database = FirebaseDatabase.getInstance().reference
 
         HomeAsync(this).execute()
 
-        initCarousel()
-
-        allForums.setOnClickListener {
-            startActivity<AllForums>()
-        }
-
-        allSpecialists.setOnClickListener {
-
-        }
-
-        search_bar.setOnClickListener {
-            startActivity<Login>()
-        }
-
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         forumRecyclerView.layoutManager = layoutManager
         forumRecyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -81,14 +45,6 @@ class Home : Fragment(), MyAsyncCallback {
         forumRecyclerView.adapter = adapter
     }
 
-    private fun initCarousel() {
-        carouselView.setImageListener(imageListener)
-        carouselView.pageCount = images.size
-    }
-
-    private val imageListener =
-        ImageListener { position, imageView -> imageView.setImageResource(images[position]) }
-
     private fun showForums() {
         try {
             database.child("Forums").addValueEventListener(object : ValueEventListener {
@@ -100,29 +56,12 @@ class Home : Fragment(), MyAsyncCallback {
                 }
 
             })
-            if (auth.currentUser != null) {
-                database.child("Users").child(auth.currentUser?.uid.toString())
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onCancelled(p0: DatabaseError) {
-                        }
-
-                        override fun onDataChange(p0: DataSnapshot) {
-                            val data = p0.getValue(Users::class.java)
-                            val name = data?.name.toString()
-                            val letter = name.toCharArray()
-                            val firstName = name.split(" ").toTypedArray()
-                            firstLetter.text = letter[0].toString()
-                            userName.text = firstName[0]
-                        }
-                    })
-            }
         } catch (e: FirebaseException) {
             Log.d("ERROR", e.message.toString())
         }
     }
 
     private fun showData(dataSnapshot: DataSnapshot) {
-        var count = 1
         listForums.clear()
         for (data in dataSnapshot.children) {
             val post = data.getValue(Forum::class.java)
@@ -135,7 +74,6 @@ class Home : Fragment(), MyAsyncCallback {
                 dataSnapshot.child(post?.id.toString()).child("views").value.toString()
             )
             listForums.add(x)
-            count++
         }
         adapter.notifyDataSetChanged()
     }
@@ -163,8 +101,10 @@ class Home : Fragment(), MyAsyncCallback {
     }
 
     override fun onPreExecute() {
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun onPostExecute() {
+        progressBar.visibility = View.GONE
     }
 }
