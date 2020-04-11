@@ -92,7 +92,9 @@ class AddForum : Fragment() {
         forumTags.setOnKeyListener(object : View.OnKeyListener{
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
-                    chip()
+                    if(forumTags.text.trim().isNotEmpty()){
+                        chip()
+                    }
                     forumTags.setText("")
                     return true
                 }
