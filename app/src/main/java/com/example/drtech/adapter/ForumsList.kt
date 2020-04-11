@@ -31,7 +31,7 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
         LayoutContainer {
         fun bindItem(items: Forum) {
             forumTitle.text = items.title
-            forumViews.text = items.views
+            forumViews.text = items.views.toString()
             forumTags.text = items.tags
 
             var photo = 0
@@ -54,7 +54,7 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
         private fun updateViews(id: String, views: String){
             val database = FirebaseDatabase.getInstance().reference.child("Forums")
             val view = views.toInt() + 1
-            database.child(id).child("views").setValue(view.toString())
+            database.child(id).child("views").setValue(view)
         }
     }
 }

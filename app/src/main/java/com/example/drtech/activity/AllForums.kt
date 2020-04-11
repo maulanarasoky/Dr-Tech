@@ -84,7 +84,7 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
                 dataSnapshot.child(post?.id.toString()).child("description").value.toString(),
                 dataSnapshot.child(post?.id.toString()).child("category").value.toString(),
                 dataSnapshot.child(post?.id.toString()).child("tags").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("views").value.toString()
+                dataSnapshot.child(post?.id.toString()).child("views").value.toString().toInt()
             )
             listForums.add(x)
         }

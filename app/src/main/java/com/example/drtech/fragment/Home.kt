@@ -67,7 +67,9 @@ class Home : Fragment(), MyAsyncCallback {
             startActivity<Login>()
         }
 
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
         forumRecyclerView.layoutManager = layoutManager
         forumRecyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -91,7 +93,7 @@ class Home : Fragment(), MyAsyncCallback {
 
     private fun showForums() {
         try {
-            database.child("Forums").addValueEventListener(object : ValueEventListener {
+            database.child("Forums").orderByChild("views").limitToLast(5).addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
 
@@ -135,7 +137,7 @@ class Home : Fragment(), MyAsyncCallback {
                 dataSnapshot.child(post?.id.toString()).child("description").value.toString(),
                 dataSnapshot.child(post?.id.toString()).child("category").value.toString(),
                 dataSnapshot.child(post?.id.toString()).child("tags").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("views").value.toString()
+                dataSnapshot.child(post?.id.toString()).child("views").value.toString().toInt()
             )
             listForums.add(x)
             count++

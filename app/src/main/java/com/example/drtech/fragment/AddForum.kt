@@ -188,7 +188,7 @@ class AddForum : Fragment() {
         if(tag.isEmpty()){
             tag = "-"
         }
-        val data = Forum(id, title, description, category, tag, "0", auth.currentUser?.uid.toString())
+        val data = Forum(id, title, description, category, tag, 0, auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
         clear()
         chipGroup.removeAllViews()
