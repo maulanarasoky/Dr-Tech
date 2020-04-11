@@ -8,6 +8,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.style.ImageSpan
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_add_forum.*
+import java.lang.StringBuilder
 
 
 /**
@@ -91,6 +93,7 @@ class AddForum : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
                     chip()
+                    forumTags.setText("")
                     return true
                 }
                 return false
@@ -99,8 +102,16 @@ class AddForum : Fragment() {
     }
 
     private fun chip(){
+        val chipValue = forumTags.text.toString().replace(" ", "")
+        for(i in 0 until chipGroup.childCount){
+            val data = chipGroup.getChildAt(i) as Chip
+            if(data.text.toString() == chipValue){
+                return
+            }
+        }
+
         val chip = Chip(context)
-        chip.text = forumTags.text.toString()
+        chip.text = chipValue
         chip.isCloseIconVisible = true
         chip.isCheckable = false
         chip.isClickable = false
@@ -163,10 +174,23 @@ class AddForum : Fragment() {
         }
         val title = forumTitle.text.toString().substring(0, 1).toUpperCase() + forumTitle.text.toString().substring(1)
         val description = forumDescription.text.toString().substring(0, 1).toUpperCase() + forumDescription.text.toString().substring(1)
-        val tag = forumTags.text.toString().substring(0, 1).toUpperCase() + forumTags.text.toString().substring(1)
+        val builder = StringBuilder()
+        for(i in 0 until chipGroup.childCount){
+            val chip = chipGroup.getChildAt(i) as Chip
+            builder.append(chip.text.toString().substring(0, 1).toUpperCase() + chip.text.toString().substring(1))
+            if(i != chipGroup.childCount - 1){
+                builder.append(" ")
+            }
+        }
+        var tag = builder.toString().replace(" ", ", ")
+        if(tag.isEmpty()){
+            tag = "-"
+        }
         val data = Forum(id, title, description, category, tag, "0", auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
         clear()
+        chipGroup.removeAllViews()
+        rowChip.visibility = View.GONE
         showAlert("Forum berhasil dibuat")
     }
 

@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="24dp">
+        android:paddingBottom="100dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar"
@@ -192,7 +192,7 @@
                         android:background="@drawable/rounded_edittext"
                         android:ems="10"
                         android:fontFamily="@font/firasans"
-                        android:hint="Tag"
+                        android:hint="Tag (optional)"
                         android:inputType="text"
                         android:padding="@dimen/activity_vertical_margin"
                         android:textColor="@android:color/black"
@@ -208,7 +208,7 @@
                     android:layout_marginTop="@dimen/activity_vertical_margin">
 
                     <com.google.android.material.chip.ChipGroup
-                        android:layout_width="match_parent"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/chipGroup" />
                 </TableRow>
