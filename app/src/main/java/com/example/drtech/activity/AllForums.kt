@@ -92,7 +92,8 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
     }
 
     private fun search(title: String){
-        database.child("Forums").orderByChild("title").startAt(title).endAt(title + "\uf8ff").addValueEventListener(object : ValueEventListener {
+        val search = title.substring(0, 1).toUpperCase() + title.substring(1)
+        database.child("Forums").orderByChild("title").startAt(search).endAt(search + "\uf8ff").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
 

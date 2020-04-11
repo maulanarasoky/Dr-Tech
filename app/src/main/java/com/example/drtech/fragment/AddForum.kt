@@ -1,23 +1,30 @@
 package com.example.drtech.fragment
 
-import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
+import android.text.style.ImageSpan
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
-
 import com.example.drtech.R
-import com.example.drtech.activity.Login
-import com.example.drtech.activity.MainActivity
 import com.example.drtech.model.Forum
+import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_add_forum.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -80,6 +87,31 @@ class AddForum : Fragment() {
         clear.setOnClickListener {
             clear()
         }
+        forumTags.setOnKeyListener(object : View.OnKeyListener{
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                    chip()
+                    return true
+                }
+                return false
+            }
+        })
+    }
+
+    private fun chip(){
+        val chip = Chip(context)
+        chip.text = forumTags.text.toString()
+        chip.isCloseIconVisible = true
+        chip.isCheckable = false
+        chip.isClickable = false
+        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
+        chip.setTextColor(resources.getColor(android.R.color.white))
+        chip.closeIconTint = resources.getColorStateList(android.R.color.white)
+        chip.setOnCloseIconClickListener {
+            chipGroup.removeView(it)
+        }
+        chipGroup.addView(chip)
+        rowChip.visibility = View.VISIBLE
     }
 
     private fun check(view: LinearLayout){
@@ -118,14 +150,21 @@ class AddForum : Fragment() {
     private fun addForum(){
         val id = database.push().key
         var category = ""
-        if(laptopState == true){
-            category = "Laptop"
-        }else if(phoneState == true){
-            category = "Hp"
-        }else if(computerState == true){
-            category = "Komputer"
+        when {
+            laptopState -> {
+                category = "Laptop"
+            }
+            phoneState -> {
+                category = "Hp"
+            }
+            computerState -> {
+                category = "Komputer"
+            }
         }
-        val data = Forum(id, forumTitle.text.toString(), forumDescription.text.toString(), category, forumTags.text.toString(), "0", auth.currentUser?.uid.toString())
+        val title = forumTitle.text.toString().substring(0, 1).toUpperCase() + forumTitle.text.toString().substring(1)
+        val description = forumDescription.text.toString().substring(0, 1).toUpperCase() + forumDescription.text.toString().substring(1)
+        val tag = forumTags.text.toString().substring(0, 1).toUpperCase() + forumTags.text.toString().substring(1)
+        val data = Forum(id, title, description, category, tag, "0", auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
         clear()
         showAlert("Forum berhasil dibuat")
