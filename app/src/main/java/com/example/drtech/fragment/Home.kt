@@ -115,6 +115,9 @@ class Home : Fragment(), MyAsyncCallback {
                             userName.text = firstName[0]
                         }
                     })
+            }else{
+                firstLetter.text = "A"
+                userName.text = "Anonymous"
             }
         } catch (e: FirebaseException) {
             Log.d("ERROR", e.message.toString())

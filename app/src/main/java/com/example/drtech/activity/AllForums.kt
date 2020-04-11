@@ -4,6 +4,7 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import com.example.drtech.model.Forum
 import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_all_forums.*
+import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
 
 class AllForums : AppCompatActivity(), MyAsyncCallback {
@@ -43,6 +45,17 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
         adapter = ForumsList(listForums)
 
         forumRecyclerView.adapter = adapter
+
+        search_bar.setOnKeyListener(object : View.OnKeyListener{
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                    search(search_bar.text.toString())
+                    toast("Mencari").show()
+                    return true
+                }
+                return false
+            }
+        })
     }
 
     private fun showForums() {
@@ -76,6 +89,18 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
             listForums.add(x)
         }
         adapter.notifyDataSetChanged()
+    }
+
+    private fun search(title: String){
+        database.child("Forums").orderByChild("title").startAt(title).endAt(title + "\uf8ff").addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                showData(p0)
+            }
+
+        })
     }
 
     inner class HomeAsync(listener: MyAsyncCallback) : AsyncTask<Void, Unit, Unit>() {
