@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.activity_search.*
 class Search : AppCompatActivity() {
 
     lateinit var database: DatabaseReference
+    val listTag: MutableList<Chip> = mutableListOf()
+    val listHardware: MutableList<Chip> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,7 @@ class Search : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         showTag()
+        showHardware()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -32,10 +35,7 @@ class Search : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    val list: MutableList<Chip> = mutableListOf()
-
-    private fun chip(data: String){
+    private fun inputChipTag(data: String){
         val chipValue = data.replace(" ", "")
         val chip = Chip(this)
         chip.text = chipValue
@@ -48,21 +48,51 @@ class Search : AppCompatActivity() {
         chip.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
                 if(chip.isChecked){
-                    if(list.size == 3){
+                    if(listTag.size == 3){
                         showToast("Tag maksimal 3")
                         chip.isChecked = false
                     }else{
-                        list.add(chip)
-                        showToast("TAMBAH : " + list.size.toString())
+                        listTag.add(chip)
+                        showToast("TAMBAH : " + listTag.size.toString())
                     }
                 }else{
-                    list.remove(chip)
-                    showToast("KURANG : " + list.size.toString())
+                    listTag.remove(chip)
+                    showToast("KURANG : " + listTag.size.toString())
                 }
             }
 
         })
         chipGroupTags.addView(chip)
+    }
+
+    private fun inputChipHardware(data: String){
+        val chipValue = data.replace(" ", "")
+        val chip = Chip(this)
+        chip.text = chipValue
+        chip.isCloseIconVisible = false
+        chip.isCheckable = true
+        chip.isClickable = true
+        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
+        chip.setTextColor(resources.getColor(android.R.color.white))
+        chip.closeIconTint = resources.getColorStateList(android.R.color.white)
+        chip.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+                if(chip.isChecked){
+                    if(listHardware.size == 3){
+                        showToast("Tag maksimal 3")
+                        chip.isChecked = false
+                    }else{
+                        listHardware.add(chip)
+                        showToast("TAMBAH : " + listHardware.size.toString())
+                    }
+                }else{
+                    listHardware.remove(chip)
+                    showToast("KURANG : " + listHardware.size.toString())
+                }
+            }
+
+        })
+        chipGroupHardware.addView(chip)
     }
 
     private fun showTag(){
@@ -77,11 +107,31 @@ class Search : AppCompatActivity() {
         })
     }
 
+    private fun showHardware(){
+        database.child("HARDWARE").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                getHardware(p0)
+            }
+
+        })
+    }
+
     private fun getTag(dataSnapshot: DataSnapshot){
         chipGroupTags.removeAllViews()
         for(data in dataSnapshot.children.reversed()){
             val tagName = data.key.toString()
-            chip(tagName)
+            inputChipTag(tagName)
+        }
+    }
+
+    private fun getHardware(dataSnapshot: DataSnapshot){
+        chipGroupHardware.removeAllViews()
+        for(data in dataSnapshot.children.reversed()){
+            val hardwareName = data.key.toString()
+            inputChipHardware(hardwareName)
         }
     }
 
