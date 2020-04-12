@@ -6,6 +6,7 @@ data class Forum(
     val description: String? = "",
     val category: String? = "",
     val tags: String? = "-",
+    val hardware: String? = "-",
     val views: Int? = 0,
     val userId: String? = ""
 )

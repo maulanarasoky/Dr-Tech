@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
 import com.example.drtech.model.Forum
+import com.example.drtech.model.Hardware
 import com.example.drtech.model.Tag
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
@@ -86,7 +87,7 @@ class AddForum : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
                     if(forumTags.text.trim().isNotEmpty()){
-                        chip()
+                        inputChipTags()
                     }
                     forumTags.setText("")
                     return true
@@ -94,12 +95,25 @@ class AddForum : Fragment() {
                 return false
             }
         })
+
+        forumHardware.setOnKeyListener(object : View.OnKeyListener{
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                    if(forumHardware.text.trim().isNotEmpty()){
+                        inputChipHardware()
+                    }
+                    forumHardware.setText("")
+                    return true
+                }
+                return false
+            }
+        })
     }
 
-    private fun chip(){
+    private fun inputChipTags(){
         val chipValue = forumTags.text.toString().replace(" ", "")
-        for(i in 0 until chipGroup.childCount){
-            val data = chipGroup.getChildAt(i) as Chip
+        for(i in 0 until chipGroupTags.childCount){
+            val data = chipGroupTags.getChildAt(i) as Chip
             if(data.text.toString() == chipValue){
                 return
             }
@@ -114,10 +128,34 @@ class AddForum : Fragment() {
         chip.setTextColor(resources.getColor(android.R.color.white))
         chip.closeIconTint = resources.getColorStateList(android.R.color.white)
         chip.setOnCloseIconClickListener {
-            chipGroup.removeView(it)
+            chipGroupTags.removeView(it)
         }
-        chipGroup.addView(chip)
-        rowChip.visibility = View.VISIBLE
+        chipGroupTags.addView(chip)
+        rowChipTags.visibility = View.VISIBLE
+    }
+
+    private fun inputChipHardware(){
+        val chipValue = forumHardware.text.toString().replace(" ", "")
+        for(i in 0 until chipGroupHardware.childCount){
+            val data = chipGroupHardware.getChildAt(i) as Chip
+            if(data.text.toString() == chipValue){
+                return
+            }
+        }
+
+        val chip = Chip(context)
+        chip.text = chipValue
+        chip.isCloseIconVisible = true
+        chip.isCheckable = false
+        chip.isClickable = false
+        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
+        chip.setTextColor(resources.getColor(android.R.color.white))
+        chip.closeIconTint = resources.getColorStateList(android.R.color.white)
+        chip.setOnCloseIconClickListener {
+            chipGroupHardware.removeView(it)
+        }
+        chipGroupHardware.addView(chip)
+        rowChipHardware.visibility = View.VISIBLE
     }
 
     private fun check(view: LinearLayout){
@@ -155,7 +193,8 @@ class AddForum : Fragment() {
 
     private fun addForum(){
         val id = database.push().key
-        var listChip: MutableList<Chip> = mutableListOf()
+        val listTag: MutableList<Chip> = mutableListOf()
+        val listHardware: MutableList<Chip> = mutableListOf()
         var category = ""
         when {
             laptopState -> {
@@ -170,64 +209,118 @@ class AddForum : Fragment() {
         }
         val title = forumTitle.text.toString().substring(0, 1).toUpperCase() + forumTitle.text.toString().substring(1)
         val description = forumDescription.text.toString().substring(0, 1).toUpperCase() + forumDescription.text.toString().substring(1)
-        val builder = StringBuilder()
-        for(i in 0 until chipGroup.childCount){
-            val chip = chipGroup.getChildAt(i) as Chip
-            builder.append(chip.text.toString().substring(0, 1).toUpperCase() + chip.text.toString().substring(1))
-            if(i != chipGroup.childCount - 1){
-                builder.append(" ")
+        val builderTag = StringBuilder()
+        val builderHardware = StringBuilder()
+        for(i in 0 until chipGroupTags.childCount){
+            val chip = chipGroupTags.getChildAt(i) as Chip
+            builderTag.append(chip.text.toString().substring(0, 1).toUpperCase() + chip.text.toString().substring(1))
+            if(i != chipGroupTags.childCount - 1){
+                builderTag.append(" ")
             }
-            listChip.add(chip)
+            listTag.add(chip)
         }
-        var tag = builder.toString().replace(" ", ", ")
+        for(i in 0 until chipGroupHardware.childCount){
+            val chip = chipGroupHardware.getChildAt(i) as Chip
+            builderHardware.append(chip.text.toString().substring(0, 1).toUpperCase() + chip.text.toString().substring(1))
+            if(i != chipGroupHardware.childCount - 1){
+                builderHardware.append(" ")
+            }
+            listHardware.add(chip)
+        }
+        var tag = builderTag.toString().replace(" ", ", ")
+        var hardware = builderHardware.toString().replace(" ", ", ")
         if(tag.isEmpty()){
             tag = "-"
         }
-        val data = Forum(id, title, description, category, tag, 0, auth.currentUser?.uid.toString())
+        if(hardware.isEmpty()){
+            hardware = "-"
+        }
+        val data = Forum(id, title, description, category, tag, hardware,0, auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
-        for(i in 0 until listChip.size){
-            val tagName = listChip[i].text
+        for(i in 0 until listTag.size){
+            val tagName = listTag[i].text
             checkTag(tagName.toString())
         }
+        for(i in 0 until listHardware.size){
+            val hardwareName = listHardware[i].text
+            checkHardware(hardwareName.toString())
+        }
         clear()
-        chipGroup.removeAllViews()
-        rowChip.visibility = View.GONE
+        chipGroupTags.removeAllViews()
+        chipGroupHardware.removeAllViews()
+        rowChipTags.visibility = View.GONE
         showAlert("Forum berhasil dibuat")
     }
 
     private fun checkTag(tagName: String){
-        database.child("TAG").child(tagName).addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child("TAGS").child(tagName).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                getData(p0, tagName)
+                getDataTag(p0, tagName)
+            }
+
+        })
+    }
+
+    private fun checkHardware(hardwareName: String){
+        database.child("HARDWARE").child(hardwareName).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                getDataHardware(p0, hardwareName)
             }
 
         })
     }
 
     private fun incrementTag(tagName: String, countTag: Int){
-        val database = FirebaseDatabase.getInstance().reference.child("TAG")
+        val database = FirebaseDatabase.getInstance().reference.child("TAGS")
         val count = countTag + 1
         database.child(tagName).child("count").setValue(count)
+    }
+
+    private fun incrementHardware(hardwareName: String, countHardware: Int){
+        val database = FirebaseDatabase.getInstance().reference.child("HARDWARE")
+        val count = countHardware + 1
+        database.child(hardwareName).child("count").setValue(count)
     }
 
     private fun pushTag(tagName: String){
         val id = database.push().key
         val data = Tag(id, tagName, 1)
         Log.d("PUSH", tagName)
-        database.child("TAG").child(tagName).setValue(data)
+        database.child("TAGS").child(tagName).setValue(data)
     }
 
-    private fun getData(dataSnapshot: DataSnapshot, tagName: String){
+    private fun pushHardware(hardwareName: String){
+        val id = database.push().key
+        val data = Hardware(id, hardwareName, 1)
+        Log.d("PUSH", hardwareName)
+        database.child("HARDWARE").child(hardwareName).setValue(data)
+    }
+
+    private fun getDataTag(dataSnapshot: DataSnapshot, tagName: String){
         if(dataSnapshot.exists()){
             val countTag = dataSnapshot.child("count").value.toString().toInt()
             Log.d("INCREMENT", tagName)
             incrementTag(tagName, countTag)
         }else{
             pushTag(tagName)
+        }
+    }
+
+    private fun getDataHardware(dataSnapshot: DataSnapshot, hardwareName: String){
+        if(dataSnapshot.exists()){
+            val countHardware = dataSnapshot.child("count").value.toString().toInt()
+            Log.d("INCREMENT", hardwareName)
+            incrementHardware(hardwareName, countHardware)
+        }else{
+            pushHardware(hardwareName)
         }
     }
 

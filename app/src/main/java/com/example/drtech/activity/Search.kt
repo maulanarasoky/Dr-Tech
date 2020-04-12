@@ -62,11 +62,11 @@ class Search : AppCompatActivity() {
             }
 
         })
-        chipGroup.addView(chip)
+        chipGroupTags.addView(chip)
     }
 
     private fun showTag(){
-        database.child("TAG").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
+        database.child("TAGS").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 
@@ -78,7 +78,7 @@ class Search : AppCompatActivity() {
     }
 
     private fun getTag(dataSnapshot: DataSnapshot){
-        chipGroup.removeAllViews()
+        chipGroupTags.removeAllViews()
         for(data in dataSnapshot.children.reversed()){
             val tagName = data.key.toString()
             chip(tagName)
