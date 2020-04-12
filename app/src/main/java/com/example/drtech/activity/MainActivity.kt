@@ -3,10 +3,13 @@ package com.example.drtech.activity
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import com.example.drtech.R
 import com.example.drtech.fragment.AddForum
@@ -33,13 +36,13 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        checkColor(home)
         loadHomeFragment()
+        checkColor(home)
         homeState = true
 
         home.setOnClickListener {
-            checkColor(home)
             loadHomeFragment()
+            checkColor(home)
             homeState = true
         }
 
@@ -49,8 +52,8 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, checkLogin)
                 homeState = true
             }else{
-                checkColor(addForum)
                 loadAddForumFragment()
+                checkColor(addForum)
                 addState = true
             }
         }
@@ -61,8 +64,8 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, checkLogin)
                 homeState = true
             }else{
-                checkColor(profile)
                 loadProfileFragment()
+                checkColor(profile)
                 profileState = true
             }
         }

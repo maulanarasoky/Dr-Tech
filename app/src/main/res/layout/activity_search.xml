@@ -81,6 +81,7 @@
                 android:src="@drawable/ic_forum" />
 
             <TextView
+                android:id="@+id/forumTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -111,6 +112,7 @@
                 android:src="@drawable/ic_technician" />
 
             <TextView
+                android:id="@+id/specialistTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

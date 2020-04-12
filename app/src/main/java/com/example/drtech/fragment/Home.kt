@@ -52,7 +52,9 @@ class Home : Fragment(), MyAsyncCallback {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        HomeAsync(this).execute()
+        if(HomeAsync(this).status != AsyncTask.Status.RUNNING){
+            HomeAsync(this).execute()
+        }
 
         initCarousel()
 
@@ -102,7 +104,7 @@ class Home : Fragment(), MyAsyncCallback {
 
             })
             if (auth.currentUser != null) {
-                database.child("Users").child(auth.currentUser?.uid.toString())
+                database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
                     .addValueEventListener(object : ValueEventListener {
                         override fun onCancelled(p0: DatabaseError) {
                         }

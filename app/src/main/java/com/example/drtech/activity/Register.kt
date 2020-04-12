@@ -62,6 +62,6 @@ class Register : AppCompatActivity() {
 
     private fun addAccountToDatabase(idUser: String?){
         val data = Users(idUser, name.text.toString(), "Regular", "-")
-        database.child("Users").child(idUser.toString()).setValue(data)
+        database.child("Users").child("Regular").child(idUser.toString()).setValue(data)
     }
 }

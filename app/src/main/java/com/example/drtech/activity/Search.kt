@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.CompoundButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.example.drtech.R
 import com.google.android.material.chip.Chip
@@ -16,6 +18,9 @@ class Search : AppCompatActivity() {
     val listTag: MutableList<Chip> = mutableListOf()
     val listHardware: MutableList<Chip> = mutableListOf()
 
+    var forumState = false
+    var specialistState = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -24,6 +29,19 @@ class Search : AppCompatActivity() {
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        check(allForums)
+        forumState = true
+
+        allForums.setOnClickListener {
+            check(allForums)
+            forumState = true
+        }
+
+        allSpecialists.setOnClickListener {
+            check(allSpecialists)
+            specialistState = true
+        }
 
         showTag()
         showHardware()
@@ -35,6 +53,32 @@ class Search : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun check(view: LinearLayout){
+        if(forumState == true){
+            allForums.background = resources.getDrawable(R.drawable.background_forum_specialist)
+            forumTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            forumState = false
+        }
+
+        if(specialistState == true){
+            allSpecialists.background = resources.getDrawable(R.drawable.background_forum_specialist)
+            specialistTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            specialistState = false
+        }
+
+        var title: TextView = forumTitle
+
+        if(view.id == R.id.allForums){
+            title = forumTitle
+        }else if(view.id == R.id.allSpecialists){
+            title = specialistTitle
+        }
+
+        view.background = resources.getDrawable(R.drawable.background_button_login_register)
+        title.setTextColor(resources.getColor(android.R.color.white))
+    }
+
     private fun inputChipTag(data: String){
         val chipValue = data.replace(" ", "")
         val chip = Chip(this)

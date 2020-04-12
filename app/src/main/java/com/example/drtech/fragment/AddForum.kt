@@ -253,7 +253,7 @@ class AddForum : Fragment() {
     }
 
     private fun checkTag(tagName: String){
-        database.child("TAGS").child(tagName).addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child("Tags").child(tagName).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -266,7 +266,7 @@ class AddForum : Fragment() {
     }
 
     private fun checkHardware(hardwareName: String){
-        database.child("HARDWARE").child(hardwareName).addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child("Hardware").child(hardwareName).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -279,13 +279,13 @@ class AddForum : Fragment() {
     }
 
     private fun incrementTag(tagName: String, countTag: Int){
-        val database = FirebaseDatabase.getInstance().reference.child("TAGS")
+        val database = FirebaseDatabase.getInstance().reference.child("Tags")
         val count = countTag + 1
         database.child(tagName).child("count").setValue(count)
     }
 
     private fun incrementHardware(hardwareName: String, countHardware: Int){
-        val database = FirebaseDatabase.getInstance().reference.child("HARDWARE")
+        val database = FirebaseDatabase.getInstance().reference.child("Hardware")
         val count = countHardware + 1
         database.child(hardwareName).child("count").setValue(count)
     }
@@ -294,14 +294,14 @@ class AddForum : Fragment() {
         val id = database.push().key
         val data = Tag(id, tagName, 1)
         Log.d("PUSH", tagName)
-        database.child("TAGS").child(tagName).setValue(data)
+        database.child("Tag").child(tagName).setValue(data)
     }
 
     private fun pushHardware(hardwareName: String){
         val id = database.push().key
         val data = Hardware(id, hardwareName, 1)
         Log.d("PUSH", hardwareName)
-        database.child("HARDWARE").child(hardwareName).setValue(data)
+        database.child("Hardware").child(hardwareName).setValue(data)
     }
 
     private fun getDataTag(dataSnapshot: DataSnapshot, tagName: String){
