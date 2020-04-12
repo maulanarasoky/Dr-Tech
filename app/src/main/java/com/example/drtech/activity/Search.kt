@@ -7,24 +7,23 @@ import android.widget.CompoundButton
 import android.widget.Toast
 import com.example.drtech.R
 import com.google.android.material.chip.Chip
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_search.*
-import org.jetbrains.anko.toast
 
 class Search : AppCompatActivity() {
+
+    lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        database = FirebaseDatabase.getInstance().reference
 
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        chip("Laptop")
-        chip("Komputer")
-        chip("HP")
-        chip("Programming")
-        chip("Web")
+        showTag()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,6 +63,32 @@ class Search : AppCompatActivity() {
 
         })
         chipGroup.addView(chip)
+    }
+
+    private fun showTag(){
+        database.child("TAG").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                getTag(p0)
+            }
+
+        })
+    }
+
+    private fun getTag(dataSnapshot: DataSnapshot){
+        val list: MutableList<String> = mutableListOf()
+        list.clear()
+        chipGroup.removeAllViews()
+        for(data in dataSnapshot.children){
+            val tagName = data.key.toString()
+            list.add(tagName)
+        }
+        list.reverse()
+        for(i in 0 until list.size){
+            chip(list[i])
+        }
     }
 
     private fun showToast(text: String){

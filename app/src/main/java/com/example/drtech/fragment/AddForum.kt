@@ -1,18 +1,11 @@
 package com.example.drtech.fragment
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
 import android.text.TextUtils
-import android.text.style.ImageSpan
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,10 +13,10 @@ import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
 import com.example.drtech.model.Forum
+import com.example.drtech.model.Tag
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_add_forum.*
 import java.lang.StringBuilder
 
@@ -162,6 +155,7 @@ class AddForum : Fragment() {
 
     private fun addForum(){
         val id = database.push().key
+        var listChip: MutableList<Chip> = mutableListOf()
         var category = ""
         when {
             laptopState -> {
@@ -183,6 +177,7 @@ class AddForum : Fragment() {
             if(i != chipGroup.childCount - 1){
                 builder.append(" ")
             }
+            listChip.add(chip)
         }
         var tag = builder.toString().replace(" ", ", ")
         if(tag.isEmpty()){
@@ -190,10 +185,50 @@ class AddForum : Fragment() {
         }
         val data = Forum(id, title, description, category, tag, 0, auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
+        for(i in 0 until listChip.size){
+            val tagName = listChip[i].text
+            checkTag(tagName.toString())
+        }
         clear()
         chipGroup.removeAllViews()
         rowChip.visibility = View.GONE
         showAlert("Forum berhasil dibuat")
+    }
+
+    private fun checkTag(tagName: String){
+        database.child("TAG").child(tagName).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                getData(p0, tagName)
+            }
+
+        })
+    }
+
+    private fun incrementTag(tagName: String, countTag: Int){
+        val database = FirebaseDatabase.getInstance().reference.child("TAG")
+        val count = countTag + 1
+        database.child(tagName).child("count").setValue(count)
+    }
+
+    private fun pushTag(tagName: String){
+        val id = database.push().key
+        val data = Tag(id, tagName, 1)
+        Log.d("PUSH", tagName)
+        database.child("TAG").child(tagName).setValue(data)
+    }
+
+    private fun getData(dataSnapshot: DataSnapshot, tagName: String){
+        if(dataSnapshot.exists()){
+            val countTag = dataSnapshot.child("count").value.toString().toInt()
+            Log.d("INCREMENT", tagName)
+            incrementTag(tagName, countTag)
+        }else{
+            pushTag(tagName)
+        }
     }
 
     private fun clear(){
