@@ -15,4 +15,8 @@
         <item name="android:fontFamily">@font/firasans</item>
     </style>
 
+    <style name="Theme.Toolbar" parent="android:Theme.Holo">
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_white</item>
+    </style>
+
 </resources>

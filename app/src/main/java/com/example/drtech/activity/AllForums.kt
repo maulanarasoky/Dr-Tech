@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,11 @@ import com.example.drtech.model.Forum
 import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_all_forums.*
+import kotlinx.android.synthetic.main.activity_all_forums.forumRecyclerView
+import kotlinx.android.synthetic.main.activity_all_forums.progressBar
+import kotlinx.android.synthetic.main.activity_all_forums.search_bar
+import kotlinx.android.synthetic.main.activity_all_forums.toolBar
+import kotlinx.android.synthetic.main.activity_search.*
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
 
@@ -30,6 +36,10 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_forums)
         database = FirebaseDatabase.getInstance().reference
+
+        setSupportActionBar(toolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         HomeAsync(this).execute()
 
@@ -58,7 +68,15 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
         })
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun showForums() {
+        progressBar.visibility = View.VISIBLE
         try {
             database.child("Forums").addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -88,10 +106,12 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
             )
             listForums.add(x)
         }
+        progressBar.visibility = View.GONE
         adapter.notifyDataSetChanged()
     }
 
     private fun search(title: String){
+        progressBar.visibility = View.VISIBLE
         var search = title
         if(title.trim().isNotEmpty()){
             search = title.substring(0, 1).toUpperCase() + title.substring(1)

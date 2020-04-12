@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
 import com.example.drtech.activity.AllForums
 import com.example.drtech.activity.Login
+import com.example.drtech.activity.Search
 import com.example.drtech.adapter.ForumsList
 import com.example.drtech.interfaces.MyAsyncCallback
 import com.example.drtech.model.Forum
@@ -64,7 +65,7 @@ class Home : Fragment(), MyAsyncCallback {
         }
 
         search_bar.setOnClickListener {
-            startActivity<Login>()
+            startActivity<Search>()
         }
 
         val layoutManager = LinearLayoutManager(context)
