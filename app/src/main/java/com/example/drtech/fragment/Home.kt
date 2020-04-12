@@ -69,8 +69,6 @@ class Home : Fragment(), MyAsyncCallback {
         }
 
         val layoutManager = LinearLayoutManager(context)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
         forumRecyclerView.layoutManager = layoutManager
         forumRecyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -130,7 +128,7 @@ class Home : Fragment(), MyAsyncCallback {
     private fun showData(dataSnapshot: DataSnapshot) {
         var count = 1
         listForums.clear()
-        for (data in dataSnapshot.children) {
+        for (data in dataSnapshot.children.reversed()) {
             val post = data.getValue(Forum::class.java)
             val x = Forum(
                 dataSnapshot.child(post?.id.toString()).child("id").value.toString(),

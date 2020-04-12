@@ -78,16 +78,10 @@ class Search : AppCompatActivity() {
     }
 
     private fun getTag(dataSnapshot: DataSnapshot){
-        val list: MutableList<String> = mutableListOf()
-        list.clear()
         chipGroup.removeAllViews()
-        for(data in dataSnapshot.children){
+        for(data in dataSnapshot.children.reversed()){
             val tagName = data.key.toString()
-            list.add(tagName)
-        }
-        list.reverse()
-        for(i in 0 until list.size){
-            chip(list[i])
+            chip(tagName)
         }
     }
 
