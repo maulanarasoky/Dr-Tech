@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -23,9 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val checkLogin = 100
-        var homeState = false
-        var addState = false
-        var profileState = false
     }
 
     lateinit var auth: FirebaseAuth
@@ -36,58 +34,34 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        loadHomeFragment()
-        checkColor(home)
-        homeState = true
-
-        home.setOnClickListener {
-            loadHomeFragment()
-            checkColor(home)
-            homeState = true
-        }
-
-        addForum.setOnClickListener {
-            if(auth.currentUser == null){
-                val intent = Intent(this, Login::class.java)
-                startActivityForResult(intent, checkLogin)
-                homeState = true
-            }else{
-                loadAddForumFragment()
-                checkColor(addForum)
-                addState = true
+        bottom_navigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    loadHomeFragment()
+                }
+                R.id.addForum -> {
+                    if (auth.currentUser == null) {
+                        val intent = Intent(this, Login::class.java)
+                        startActivityForResult(intent, checkLogin)
+                    } else {
+                        loadAddForumFragment()
+                    }
+                }
+                R.id.profile -> {
+                    if (auth.currentUser == null) {
+                        val intent = Intent(this, Login::class.java)
+                        startActivityForResult(intent, checkLogin)
+                    } else {
+                        loadProfileFragment()
+                    }
+                }
             }
+            true
         }
 
-        profile.setOnClickListener {
-            if(auth.currentUser == null){
-                val intent = Intent(this, Login::class.java)
-                startActivityForResult(intent, checkLogin)
-                homeState = true
-            }else{
-                loadProfileFragment()
-                checkColor(profile)
-                profileState = true
-            }
+        if(savedInstanceState == null){
+            bottom_navigation.selectedItemId = R.id.home
         }
-    }
-
-    private fun checkColor(view: ImageView){
-        if(homeState == true){
-            DrawableCompat.setTint(DrawableCompat.wrap(home.drawable), Color.parseColor("#979797"))
-            homeState = false
-        }
-
-        if(addState == true){
-            DrawableCompat.setTint(DrawableCompat.wrap(addForum.drawable), Color.parseColor("#979797"))
-            addState = false
-        }
-
-        if(profileState == true){
-            DrawableCompat.setTint(DrawableCompat.wrap(profile.drawable), Color.parseColor("#979797"))
-            profileState = false
-        }
-
-        DrawableCompat.setTint(DrawableCompat.wrap(view.drawable), resources.getColor(R.color.twitterColour))
     }
 
     private fun loadHomeFragment(){
@@ -116,9 +90,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("REQUEST CODE", requestCode.toString())
         Log.d("RESULT CODE", resultCode.toString())
         if (requestCode == checkLogin){
-            checkColor(home)
-            loadHomeFragment()
-            homeState = true
+            bottom_navigation.selectedItemId = R.id.home
         }
     }
 }

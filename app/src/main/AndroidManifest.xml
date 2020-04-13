@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".activity.Search"></activity>
+        <activity android:name=".activity.Search" />
         <activity android:name=".activity.AllSpecialists" />
         <activity android:name=".activity.AllForums" />
         <activity
@@ -26,8 +26,7 @@
             android:name=".activity.Login"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait">
+            android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

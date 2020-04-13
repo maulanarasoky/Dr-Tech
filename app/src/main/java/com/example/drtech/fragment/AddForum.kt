@@ -7,7 +7,9 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -16,6 +18,7 @@ import com.example.drtech.model.Forum
 import com.example.drtech.model.Hardware
 import com.example.drtech.model.Tag
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_add_forum.*
@@ -87,7 +90,7 @@ class AddForum : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
                     if(forumTags.text.trim().isNotEmpty()){
-                        inputChipTags()
+                        inputChip(chipGroupTags, forumTags, rowChipTags)
                     }
                     forumTags.setText("")
                     return true
@@ -100,7 +103,7 @@ class AddForum : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
                     if(forumHardware.text.trim().isNotEmpty()){
-                        inputChipHardware()
+                        inputChip(chipGroupHardware, forumHardware, rowChipHardware)
                     }
                     forumHardware.setText("")
                     return true
@@ -110,10 +113,10 @@ class AddForum : Fragment() {
         })
     }
 
-    private fun inputChipTags(){
-        val chipValue = forumTags.text.toString().replace(" ", "")
-        for(i in 0 until chipGroupTags.childCount){
-            val data = chipGroupTags.getChildAt(i) as Chip
+    private fun inputChip(chipGroup: ChipGroup, editText: EditText, tableRow: TableRow){
+        val chipValue = editText.text.toString().replace(" ", "")
+        for(i in 0 until chipGroup.childCount){
+            val data = chipGroup.getChildAt(i) as Chip
             if(data.text.toString() == chipValue){
                 return
             }
@@ -128,34 +131,10 @@ class AddForum : Fragment() {
         chip.setTextColor(resources.getColor(android.R.color.white))
         chip.closeIconTint = resources.getColorStateList(android.R.color.white)
         chip.setOnCloseIconClickListener {
-            chipGroupTags.removeView(it)
+            chipGroup.removeView(it)
         }
-        chipGroupTags.addView(chip)
-        rowChipTags.visibility = View.VISIBLE
-    }
-
-    private fun inputChipHardware(){
-        val chipValue = forumHardware.text.toString().replace(" ", "")
-        for(i in 0 until chipGroupHardware.childCount){
-            val data = chipGroupHardware.getChildAt(i) as Chip
-            if(data.text.toString() == chipValue){
-                return
-            }
-        }
-
-        val chip = Chip(context)
-        chip.text = chipValue
-        chip.isCloseIconVisible = true
-        chip.isCheckable = false
-        chip.isClickable = false
-        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
-        chip.setTextColor(resources.getColor(android.R.color.white))
-        chip.closeIconTint = resources.getColorStateList(android.R.color.white)
-        chip.setOnCloseIconClickListener {
-            chipGroupHardware.removeView(it)
-        }
-        chipGroupHardware.addView(chip)
-        rowChipHardware.visibility = View.VISIBLE
+        chipGroup.addView(chip)
+        tableRow.visibility = View.VISIBLE
     }
 
     private fun check(view: LinearLayout){
@@ -213,7 +192,7 @@ class AddForum : Fragment() {
         val builderHardware = StringBuilder()
         for(i in 0 until chipGroupTags.childCount){
             val chip = chipGroupTags.getChildAt(i) as Chip
-            builderTag.append(chip.text.toString().substring(0, 1).toUpperCase() + chip.text.toString().substring(1))
+            builderTag.append(chip.text.toString())
             if(i != chipGroupTags.childCount - 1){
                 builderTag.append(" ")
             }
@@ -221,7 +200,7 @@ class AddForum : Fragment() {
         }
         for(i in 0 until chipGroupHardware.childCount){
             val chip = chipGroupHardware.getChildAt(i) as Chip
-            builderHardware.append(chip.text.toString().substring(0, 1).toUpperCase() + chip.text.toString().substring(1))
+            builderHardware.append(chip.text.toString())
             if(i != chipGroupHardware.childCount - 1){
                 builderHardware.append(" ")
             }
@@ -294,7 +273,7 @@ class AddForum : Fragment() {
         val id = database.push().key
         val data = Tag(id, tagName, 1)
         Log.d("PUSH", tagName)
-        database.child("Tag").child(tagName).setValue(data)
+        database.child("Tags").child(tagName).setValue(data)
     }
 
     private fun pushHardware(hardwareName: String){

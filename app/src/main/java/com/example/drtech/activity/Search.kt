@@ -9,10 +9,15 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.drtech.R
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_search.*
 
 class Search : AppCompatActivity() {
+
+    companion object{
+        const val STATE_TYPE = "TYPE"
+    }
 
     lateinit var database: DatabaseReference
     val listTag: MutableList<Chip> = mutableListOf()
@@ -45,6 +50,18 @@ class Search : AppCompatActivity() {
 
         showTag()
         showHardware()
+
+        if(savedInstanceState != null){
+            val getData = savedInstanceState.getString(STATE_TYPE)
+            if(getData == "Forum"){
+                check(allForums)
+                forumState = true
+            }else{
+                check(allSpecialists)
+                specialistState = true
+            }
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -79,7 +96,7 @@ class Search : AppCompatActivity() {
         title.setTextColor(resources.getColor(android.R.color.white))
     }
 
-    private fun inputChipTag(data: String){
+    private fun inputChip(data: String, chipGroup: ChipGroup, list: MutableList<Chip>){
         val chipValue = data.replace(" ", "")
         val chip = Chip(this)
         chip.text = chipValue
@@ -92,55 +109,25 @@ class Search : AppCompatActivity() {
         chip.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
                 if(chip.isChecked){
-                    if(listTag.size == 3){
+                    if(list.size == 3){
                         showToast("Tag maksimal 3")
                         chip.isChecked = false
                     }else{
-                        listTag.add(chip)
-                        showToast("TAMBAH : " + listTag.size.toString())
+                        list.add(chip)
+                        showToast("TAMBAH : " + list.size.toString())
                     }
                 }else{
-                    listTag.remove(chip)
-                    showToast("KURANG : " + listTag.size.toString())
+                    list.remove(chip)
+                    showToast("KURANG : " + list.size.toString())
                 }
             }
 
         })
-        chipGroupTags.addView(chip)
-    }
-
-    private fun inputChipHardware(data: String){
-        val chipValue = data.replace(" ", "")
-        val chip = Chip(this)
-        chip.text = chipValue
-        chip.isCloseIconVisible = false
-        chip.isCheckable = true
-        chip.isClickable = true
-        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
-        chip.setTextColor(resources.getColor(android.R.color.white))
-        chip.closeIconTint = resources.getColorStateList(android.R.color.white)
-        chip.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-                if(chip.isChecked){
-                    if(listHardware.size == 3){
-                        showToast("Tag maksimal 3")
-                        chip.isChecked = false
-                    }else{
-                        listHardware.add(chip)
-                        showToast("TAMBAH : " + listHardware.size.toString())
-                    }
-                }else{
-                    listHardware.remove(chip)
-                    showToast("KURANG : " + listHardware.size.toString())
-                }
-            }
-
-        })
-        chipGroupHardware.addView(chip)
+        chipGroup.addView(chip)
     }
 
     private fun showTag(){
-        database.child("TAGS").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
+        database.child("Tags").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 
@@ -152,7 +139,7 @@ class Search : AppCompatActivity() {
     }
 
     private fun showHardware(){
-        database.child("HARDWARE").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
+        database.child("Hardware").orderByChild("count").limitToLast(5).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 
@@ -167,7 +154,7 @@ class Search : AppCompatActivity() {
         chipGroupTags.removeAllViews()
         for(data in dataSnapshot.children.reversed()){
             val tagName = data.key.toString()
-            inputChipTag(tagName)
+            inputChip(tagName, chipGroupTags, listTag)
         }
     }
 
@@ -175,11 +162,20 @@ class Search : AppCompatActivity() {
         chipGroupHardware.removeAllViews()
         for(data in dataSnapshot.children.reversed()){
             val hardwareName = data.key.toString()
-            inputChipHardware(hardwareName)
+            inputChip(hardwareName, chipGroupHardware, listHardware)
         }
     }
 
     private fun showToast(text: String){
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        if(forumState){
+            outState.putString(STATE_TYPE, "Forum")
+        }else{
+            outState.putString(STATE_TYPE, "Specialist")
+        }
+        super.onSaveInstanceState(outState)
     }
 }
