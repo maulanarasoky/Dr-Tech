@@ -30,21 +30,20 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
         LayoutContainer {
         fun bindItem(items: Forum) {
-            forumTitle.text = items.title
-            forumViews.text = items.views.toString()
-            forumTags.text = items.tags
+            forum_title.text = items.title
+            forum_views.text = items.views.toString()
 
             var photo = 0
 
             if(items.category == "Laptop"){
-                photo = R.drawable.ic_laptop
+                photo = R.drawable.laptop
             }else if(items.category == "Komputer"){
-                photo = R.drawable.ic_computer
+                photo = R.drawable.computer
             }else if(items.category == "Hp"){
-                photo = R.drawable.ic_smartphone
+                photo = R.drawable.smartphone
             }
 
-            Glide.with(itemView.context).load(photo).into(forumPic)
+            Glide.with(itemView.context).load(photo).into(forum_pic)
 
             itemView.setOnClickListener {
                 updateViews(items.id.toString(), items.views.toString())

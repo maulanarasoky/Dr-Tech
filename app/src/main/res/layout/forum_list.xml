@@ -1,83 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    app:cardCornerRadius="10dp">
 
-    <ImageView
-        android:id="@+id/forumPic"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="4dp"
-        app:layout_constraintEnd_toStartOf="@id/forumTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/forum_specialist_background">
 
-    <TextView
-        android:id="@+id/forumTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:fontFamily="@font/firasans"
-        android:text="Title"
-        android:maxLines="2"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/forumPic"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/forum_pic"
+            android:layout_width="180dp"
+            android:layout_height="195dp"
+            android:src="@drawable/computer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/ic_tag"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_tag"
-        app:layout_constraintTop_toBottomOf="@id/forumTitle"
-        app:layout_constraintStart_toEndOf="@id/forumPic"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/forum_title"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:background="@drawable/background_title"
+            android:fontFamily="@font/firasans"
+            android:maxLines="2"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingBottom="8dp"
+            android:text="Judul"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/forum_pic" />
 
-    <TextView
-        android:id="@+id/forumTags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/firasans"
-        android:text="Laptop"
-        android:textColor="@android:color/black"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@id/ic_tag"
-        app:layout_constraintTop_toBottomOf="@id/forumTitle"
-        android:layout_marginStart="8dp"/>
+        <View
+            android:id="@+id/totalViews"
+            android:layout_width="61dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/background_category_views"
+            app:layout_constraintEnd_toEndOf="@id/forum_pic"
+            app:layout_constraintTop_toTopOf="@id/forum_pic" />
 
-    <ImageView
-        android:id="@+id/ic_views"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_views"
-        app:layout_constraintTop_toBottomOf="@id/ic_tag"
-        app:layout_constraintStart_toEndOf="@id/forumPic"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="8dp" />
+        <ImageView
+            android:id="@+id/pic_views"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_views_white"
+            app:layout_constraintBottom_toBottomOf="@id/totalViews"
+            app:layout_constraintStart_toStartOf="@id/totalViews"
+            app:layout_constraintTop_toTopOf="@id/totalViews" />
 
-    <TextView
-        android:id="@+id/forumViews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/firasans"
-        android:text="0"
-        android:textColor="@android:color/black"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ic_views"
-        app:layout_constraintTop_toBottomOf="@id/forumTags" />
+        <TextView
+            android:id="@+id/forum_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/firasans"
+            android:text="1456"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/pic_views"
+            app:layout_constraintEnd_toEndOf="@id/totalViews"
+            app:layout_constraintStart_toEndOf="@id/pic_views"
+            app:layout_constraintTop_toTopOf="@id/pic_views" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

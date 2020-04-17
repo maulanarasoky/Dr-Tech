@@ -74,13 +74,13 @@ class Search : AppCompatActivity() {
     private fun check(view: LinearLayout){
         if(forumState == true){
             allForums.background = resources.getDrawable(R.drawable.background_forum_specialist)
-            forumTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            forumTitle.setTextColor(resources.getColor(R.color.purpleDark))
             forumState = false
         }
 
         if(specialistState == true){
             allSpecialists.background = resources.getDrawable(R.drawable.background_forum_specialist)
-            specialistTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            specialistTitle.setTextColor(resources.getColor(R.color.purpleDark))
             specialistState = false
         }
 
@@ -103,7 +103,7 @@ class Search : AppCompatActivity() {
         chip.isCloseIconVisible = false
         chip.isCheckable = true
         chip.isClickable = true
-        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
+        chip.chipBackgroundColor = resources.getColorStateList(R.color.purpleDark)
         chip.setTextColor(resources.getColor(android.R.color.white))
         chip.closeIconTint = resources.getColorStateList(android.R.color.white)
         chip.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{

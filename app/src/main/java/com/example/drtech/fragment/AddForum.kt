@@ -127,7 +127,7 @@ class AddForum : Fragment() {
         chip.isCloseIconVisible = true
         chip.isCheckable = false
         chip.isClickable = false
-        chip.chipBackgroundColor = resources.getColorStateList(R.color.twitterColour)
+        chip.chipBackgroundColor = resources.getColorStateList(R.color.purpleDark)
         chip.setTextColor(resources.getColor(android.R.color.white))
         chip.closeIconTint = resources.getColorStateList(android.R.color.white)
         chip.setOnCloseIconClickListener {
@@ -140,19 +140,19 @@ class AddForum : Fragment() {
     private fun check(view: LinearLayout){
         if(laptopState == true){
             laptop.background = resources.getDrawable(R.drawable.background_forum_specialist)
-            laptopTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            laptopTitle.setTextColor(resources.getColor(R.color.purpleDark))
             laptopState = false
         }
 
         if(phoneState == true){
             smartphone.background = resources.getDrawable(R.drawable.background_forum_specialist)
-            smartphoneTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            smartphoneTitle.setTextColor(resources.getColor(R.color.purpleDark))
             phoneState = false
         }
 
         if(computerState == true){
             computer.background = resources.getDrawable(R.drawable.background_forum_specialist)
-            computerTitle.setTextColor(resources.getColor(R.color.twitterColour))
+            computerTitle.setTextColor(resources.getColor(R.color.purpleDark))
             computerState = false
         }
 

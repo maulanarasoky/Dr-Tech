@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
@@ -43,14 +44,8 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
 
         HomeAsync(this).execute()
 
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, 2)
         forumRecyclerView.layoutManager = layoutManager
-        forumRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                forumRecyclerView.context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
 
         adapter = ForumsList(listForums)
 

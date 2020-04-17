@@ -56,7 +56,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/firasans"
                 android:text="Laptop"
-                android:textColor="@color/twitterColour"
+                android:textColor="@color/purpleDark"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -86,7 +86,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/firasans"
                 android:text="Hp"
-                android:textColor="@color/twitterColour"
+                android:textColor="@color/purpleDark"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -116,7 +116,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/firasans"
                 android:text="Komputer"
-                android:textColor="@color/twitterColour"
+                android:textColor="@color/purpleDark"
                 android:textSize="14sp" />
         </LinearLayout>
 

@@ -16,6 +16,10 @@ class HomeViewModel: ViewModel() {
     val forumLiveData = MutableLiveData<MutableList<Forum>>()
     var listForums: MutableList<Forum> = mutableListOf()
 
+    val totalForums = MutableLiveData<Long>()
+    val totalSpecialists = MutableLiveData<Long>()
+    val totalTags = MutableLiveData<Long>()
+
     lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference
 
@@ -78,8 +82,52 @@ class HomeViewModel: ViewModel() {
         forumLiveData.postValue(listForums)
     }
 
+    fun showTotal(){
+        database.child("Forums").addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                totalForums.postValue(p0.childrenCount)
+            }
+
+        })
+
+        database.child("Specialists").addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                totalSpecialists.postValue(p0.childrenCount)
+            }
+
+        })
+
+        database.child("Tags").addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                totalTags.postValue(p0.childrenCount)
+            }
+
+        })
+    }
+
     fun getForums(): LiveData<MutableList<Forum>> {
         return forumLiveData
+    }
+
+    fun getTotalForums(): LiveData<Long>{
+        return totalForums
+    }
+
+    fun getTotalSpecialist(): LiveData<Long>{
+        return totalSpecialists
+    }
+
+    fun getTotalTags(): LiveData<Long>{
+        return totalTags
     }
 
 }

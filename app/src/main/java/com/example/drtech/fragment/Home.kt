@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.drtech.R
 import com.example.drtech.activity.AllForums
@@ -43,8 +44,6 @@ class Home : Fragment() {
 
     private lateinit var mainViewModel: HomeViewModel
 
-    val images = intArrayOf(R.drawable.sample1, R.drawable.sample2, R.drawable.sample3)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,51 +57,45 @@ class Home : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        allForums.setOnClickListener {
+        forum.setOnClickListener {
             startActivity<AllForums>()
         }
 
-        allSpecialists.setOnClickListener {
+        specialist.setOnClickListener {
 
         }
 
-        search_bar.setOnClickListener {
-            startActivity<Search>()
-        }
-
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = GridLayoutManager(context, 2)
         forumRecyclerView.layoutManager = layoutManager
-        forumRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                forumRecyclerView.context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(HomeViewModel::class.java)
         mainViewModel.showForums(firstLetter, userName)
+        mainViewModel.showTotal()
         showLoading(true)
         mainViewModel.getForums().observe(this, Observer { forumItems ->
             if (forumItems != null) {
                 adapter = ForumsList(forumItems)
                 forumRecyclerView.adapter = adapter
                 showLoading(false)
-                carouselView.visibility = View.VISIBLE
-                allForums.visibility = View.VISIBLE
-                allSpecialists.visibility = View.VISIBLE
+                forum.visibility = View.VISIBLE
+                specialist.visibility = View.VISIBLE
                 titleForum.visibility = View.VISIBLE
                 forumRecyclerView.visibility = View.VISIBLE
                 titleSpecialist.visibility = View.VISIBLE
                 specialistRecyclerView.visibility = View.VISIBLE
-                initCarousel()
             }
         })
-    }
-    private fun initCarousel() {
-        carouselView.setImageListener{
-                position, imageView -> imageView.setImageResource(images[position])
-        }
-        carouselView.pageCount = images.size
+        mainViewModel.getTotalForums().observe(this, Observer { totalForum ->
+            totalForums.text =  "$totalForum Forum"
+        })
+
+        mainViewModel.getTotalSpecialist().observe(this, Observer { totalSpecialist ->
+            totalSpecialists.text =  "$totalSpecialist Specialist"
+        })
+
+        mainViewModel.getTotalTags().observe(this, Observer { totalTag ->
+            totalTags.text =  "$totalTag Tag"
+        })
     }
 
     private fun showLoading(state: Boolean){
