@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:fontFamily="@font/firasans"
-        android:text="Komentar"
+        android:text="Mencari..."
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -58,61 +58,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/toolBar" />
 
+    <TextView
+        android:id="@+id/searchWhat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menampilkan Mobil..."
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textSize="14sp"
+        android:fontFamily="@font/firasans"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="160dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBar" />
-
-    <View
-        android:id="@+id/bgComment"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/background_comments"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/commentText"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="60dp"
-        android:background="@drawable/background_comment"
-        android:fontFamily="@font/firasans"
-        android:hint="Komentar"
-        android:textCursorDrawable="@drawable/color_cursor"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/bgComment"
-        app:layout_constraintEnd_toStartOf="@id/sendComment"
-        app:layout_constraintStart_toStartOf="@id/bgComment"
-        app:layout_constraintTop_toTopOf="@id/bgComment" />
-
-    <View
-        android:id="@+id/sendComment"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/background_button_login_register"
-        app:layout_constraintBottom_toBottomOf="@id/bgComment"
-        app:layout_constraintEnd_toEndOf="@id/bgComment"
-        app:layout_constraintTop_toTopOf="@id/bgComment" />
-
-    <View
-        android:layout_width="20dp"
-        android:layout_height="24dp"
-        android:background="@drawable/ic_arrow_white"
-        app:layout_constraintBottom_toBottomOf="@id/sendComment"
-        app:layout_constraintEnd_toEndOf="@id/sendComment"
-        app:layout_constraintStart_toStartOf="@id/sendComment"
-        app:layout_constraintTop_toTopOf="@id/sendComment" />
+        app:layout_constraintTop_toBottomOf="@id/searchWhat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
