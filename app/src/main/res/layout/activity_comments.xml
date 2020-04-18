@@ -25,6 +25,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/backBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/back_btn_background"
+        app:layout_constraintTop_toTopOf="@id/toolBar"
+        app:layout_constraintStart_toStartOf="@id/toolBar"
+        app:layout_constraintBottom_toBottomOf="@id/toolBar"
+        android:layout_marginStart="@dimen/activity_horizontal_margin" />
+
+    <View
+        android:layout_width="20dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_arrow_back_purple_dark"
+        app:layout_constraintTop_toTopOf="@id/backBtn"
+        app:layout_constraintStart_toStartOf="@id/backBtn"
+        app:layout_constraintEnd_toEndOf="@id/backBtn"
+        app:layout_constraintBottom_toBottomOf="@id/backBtn" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -41,8 +60,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentsRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +77,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
+        android:id="@+id/commentText"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -67,7 +88,6 @@
         android:textCursorDrawable="@drawable/color_cursor"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
-
         android:textColor="@android:color/black"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/bgComment"

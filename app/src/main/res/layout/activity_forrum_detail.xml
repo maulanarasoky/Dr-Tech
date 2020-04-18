@@ -29,6 +29,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/backBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/back_btn_background"
+            app:layout_constraintTop_toTopOf="@id/title"
+            app:layout_constraintStart_toStartOf="@id/toolBar"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            android:layout_marginStart="@dimen/activity_horizontal_margin" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_arrow_back_purple_dark"
+            app:layout_constraintTop_toTopOf="@id/backBtn"
+            app:layout_constraintStart_toStartOf="@id/backBtn"
+            app:layout_constraintEnd_toEndOf="@id/backBtn"
+            app:layout_constraintBottom_toBottomOf="@id/backBtn" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -72,9 +91,9 @@
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:background="@drawable/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

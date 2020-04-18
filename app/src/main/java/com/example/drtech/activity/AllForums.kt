@@ -39,8 +39,6 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
 
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         HomeAsync(this).execute()
 
@@ -61,13 +59,10 @@ class AllForums : AppCompatActivity(), MyAsyncCallback {
                 return false
             }
         })
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home){
+        backBtn.setOnClickListener {
             finish()
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun showForums() {

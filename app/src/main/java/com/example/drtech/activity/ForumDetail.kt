@@ -20,8 +20,6 @@ class ForumDetail : AppCompatActivity() {
 
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         val parcelData: Forum? = intent.getParcelableExtra(data)
 
@@ -38,17 +36,14 @@ class ForumDetail : AppCompatActivity() {
 
         comments.setOnClickListener {
             startActivity<Comments>(
-
+                Comments.FORUM_ID to parcelData?.id
             )
             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
         }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home){
+        backBtn.setOnClickListener {
             finish()
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun chip(tagName: String){
