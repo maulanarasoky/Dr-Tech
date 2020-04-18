@@ -107,6 +107,7 @@
         app:layout_constraintTop_toTopOf="@id/bgComment" />
 
     <View
+        android:id="@+id/arrow"
         android:layout_width="20dp"
         android:layout_height="24dp"
         android:background="@drawable/ic_arrow_white"

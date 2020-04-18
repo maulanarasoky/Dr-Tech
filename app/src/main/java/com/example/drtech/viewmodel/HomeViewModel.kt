@@ -38,6 +38,7 @@ class HomeViewModel: ViewModel() {
 
             })
             if (auth.currentUser != null) {
+                var check = false
                 database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
                     .addValueEventListener(object : ValueEventListener {
                         override fun onCancelled(p0: DatabaseError) {
@@ -45,13 +46,35 @@ class HomeViewModel: ViewModel() {
 
                         override fun onDataChange(p0: DataSnapshot) {
                             val data = p0.getValue(Users::class.java)
-                            val name = data?.name.toString()
-                            val letter = name.toCharArray()
-                            val firstName = name.split(" ").toTypedArray()
-                            firstLetter.text = letter[0].toString()
-                            userName.text = firstName[0]
+                            if(data != null){
+                                val name = data.name.toString()
+                                val letter = name.toCharArray()
+                                val firstName = name.split(" ").toTypedArray()
+                                firstLetter.text = letter[0].toString()
+                                userName.text = firstName[0]
+                                check = true
+                            }
                         }
                     })
+                if(check == false){
+                    database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {
+                            }
+
+                            override fun onDataChange(p0: DataSnapshot) {
+                                val data = p0.getValue(Users::class.java)
+                                if(data != null){
+                                    val name = data.name.toString()
+                                    val letter = name.toCharArray()
+                                    val firstName = name.split(" ").toTypedArray()
+                                    firstLetter.text = letter[0].toString()
+                                    userName.text = firstName[0]
+                                    check = true
+                                }
+                            }
+                        })
+                }
             }else{
                 firstLetter.text = "A"
                 userName.text = "Anonymous"
@@ -101,7 +124,7 @@ class HomeViewModel: ViewModel() {
 
         })
 
-        database.child("Specialists").addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child("Users").child("Specialist").addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 

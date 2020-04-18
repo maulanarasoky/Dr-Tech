@@ -39,6 +39,13 @@ class Comments : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
+        if(auth.currentUser == null){
+            bgComment.visibility = View.GONE
+            sendComment.visibility = View.GONE
+            commentText.visibility = View.GONE
+            arrow.visibility = View.GONE
+        }
+
         val layoutManager = LinearLayoutManager(this)
         commentsRecyclerView.layoutManager = layoutManager
         commentsRecyclerView.setHasFixedSize(true)
@@ -61,6 +68,7 @@ class Comments : AppCompatActivity() {
         })
 
         var name = ""
+        var check = false
         database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -68,10 +76,30 @@ class Comments : AppCompatActivity() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val user = p0.getValue(Users::class.java)
-                    name = user?.name.toString()
+                    if(user != null){
+                        name = user.name.toString()
+                        check = true
+                    }
 
                 }
             })
+
+        if(check == false){
+            database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val user = p0.getValue(Users::class.java)
+                        if(user != null){
+                            name = user.name.toString()
+                            check = true
+                        }
+
+                    }
+                })
+        }
 
         sendComment.setOnClickListener {
             sendComment(name)

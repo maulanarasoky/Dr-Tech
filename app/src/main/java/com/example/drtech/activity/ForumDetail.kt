@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.example.drtech.R
 import com.example.drtech.model.Forum
+import com.example.drtech.model.Users
 import com.google.android.material.chip.Chip
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_forrum_detail.*
@@ -32,6 +33,37 @@ class ForumDetail : AppCompatActivity() {
 
         forum_title.text = parcelData?.title
         forum_description.text = parcelData?.description
+
+        var check = false
+        database.child("Users").child("Regular").child(parcelData?.userId.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val user = p0.getValue(Users::class.java)
+                if(user != null){
+                    forum_owner.text = "By : " + user.name
+                    check = true
+                }
+            }
+
+        })
+
+        if(check == false){
+            database.child("Users").child("Specialist").child(parcelData?.userId.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val user = p0.getValue(Users::class.java)
+                    if(user != null){
+                        forum_owner.text = "By : " + user.name
+                        check = true
+                    }
+                }
+
+            })
+        }
 
         for (i in 0 until parcelData?.tags!!.size){
             chip(parcelData.tags[i])
