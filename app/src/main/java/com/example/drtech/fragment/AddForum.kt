@@ -7,10 +7,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
@@ -133,7 +130,11 @@ class AddForum : Fragment() {
         chip.setOnCloseIconClickListener {
             chipGroup.removeView(it)
         }
-        chipGroup.addView(chip)
+        if(chipGroup.childCount == 3){
+            showAlert("Masing-masing tag maksimal 3")
+        }else{
+            chipGroup.addView(chip)
+        }
         tableRow.visibility = View.VISIBLE
     }
 
@@ -166,14 +167,14 @@ class AddForum : Fragment() {
             title = computerTitle
         }
 
-        view.background = resources.getDrawable(R.drawable.background_button_login_register)
+        view.background = resources.getDrawable(R.drawable.background_selected_category)
         title.setTextColor(resources.getColor(android.R.color.white))
     }
 
     private fun addForum(){
         val id = database.push().key
-        val listTag: MutableList<Chip> = mutableListOf()
-        val listHardware: MutableList<Chip> = mutableListOf()
+        val listTag: MutableList<String> = mutableListOf()
+        val listHardware: MutableList<String> = mutableListOf()
         var category = ""
         when {
             laptopState -> {
@@ -188,46 +189,29 @@ class AddForum : Fragment() {
         }
         val title = forumTitle.text.toString().substring(0, 1).toUpperCase() + forumTitle.text.toString().substring(1)
         val description = forumDescription.text.toString().substring(0, 1).toUpperCase() + forumDescription.text.toString().substring(1)
-        val builderTag = StringBuilder()
-        val builderHardware = StringBuilder()
         for(i in 0 until chipGroupTags.childCount){
             val chip = chipGroupTags.getChildAt(i) as Chip
-            builderTag.append(chip.text.toString())
-            if(i != chipGroupTags.childCount - 1){
-                builderTag.append(" ")
-            }
-            listTag.add(chip)
+            listTag.add(chip.text.toString())
         }
         for(i in 0 until chipGroupHardware.childCount){
             val chip = chipGroupHardware.getChildAt(i) as Chip
-            builderHardware.append(chip.text.toString())
-            if(i != chipGroupHardware.childCount - 1){
-                builderHardware.append(" ")
-            }
-            listHardware.add(chip)
+            listHardware.add(chip.text.toString())
         }
-        var tag = builderTag.toString().replace(" ", ", ")
-        var hardware = builderHardware.toString().replace(" ", ", ")
-        if(tag.isEmpty()){
-            tag = "-"
-        }
-        if(hardware.isEmpty()){
-            hardware = "-"
-        }
-        val data = Forum(id, title, description, category, tag, hardware,0, auth.currentUser?.uid.toString())
+        val data = Forum(id, title, description, category, listTag, listHardware,0, auth.currentUser?.uid.toString())
         database.child("Forums").child(id.toString()).setValue(data)
         for(i in 0 until listTag.size){
-            val tagName = listTag[i].text
-            checkTag(tagName.toString())
+            val tagName = listTag[i]
+            checkTag(tagName)
         }
         for(i in 0 until listHardware.size){
-            val hardwareName = listHardware[i].text
-            checkHardware(hardwareName.toString())
+            val hardwareName = listHardware[i]
+            checkHardware(hardwareName)
         }
         clear()
         chipGroupTags.removeAllViews()
         chipGroupHardware.removeAllViews()
         rowChipTags.visibility = View.GONE
+        rowChipHardware.visibility = View.GONE
         showAlert("Forum berhasil dibuat")
     }
 
@@ -311,7 +295,7 @@ class AddForum : Fragment() {
 
     private fun showAlert(title: String){
         val dialog = SweetAlertDialog(context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-        dialog.setCustomImage(R.drawable.ic_success_alert)
+        dialog.setCustomImage(R.drawable.ic_dr_tech)
         dialog.titleText = title
         dialog.setCancelable(false)
         dialog.show()

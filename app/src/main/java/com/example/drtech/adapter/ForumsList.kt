@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.drtech.R
+import com.example.drtech.activity.ForumDetail
 import com.example.drtech.activity.Login
 import com.example.drtech.model.Forum
 import com.google.firebase.database.FirebaseDatabase
@@ -46,6 +47,9 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
             Glide.with(itemView.context).load(photo).into(forum_pic)
 
             itemView.setOnClickListener {
+                itemView.context.startActivity<ForumDetail>(
+                    ForumDetail.data to items
+                )
                 updateViews(items.id.toString(), items.views.toString())
             }
         }

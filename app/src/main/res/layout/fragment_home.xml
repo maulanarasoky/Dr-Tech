@@ -164,76 +164,83 @@
             app:layout_constraintEnd_toEndOf="@id/total"
             app:layout_constraintTop_toTopOf="@id/total" />
 
-        <LinearLayout
-            android:id="@+id/forum"
-            android:layout_width="145dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="12dp"
+        <TableLayout
+            android:id="@+id/table"
+            android:layout_width="wrap_content"
             android:visibility="gone"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/total"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             app:layout_constraintStart_toStartOf="@id/total"
-            app:layout_constraintTop_toBottomOf="@id/total"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/background_main_feature"
-            android:gravity="center">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_forum" />
-
-                <TextView
+            app:layout_constraintEnd_toEndOf="@id/total">
+            <TableRow>
+                <LinearLayout
+                    android:id="@+id/forum"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/firasans"
-                    android:text="Forum"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/background_main_feature"
+                    android:gravity="center">
 
-        <LinearLayout
-            android:id="@+id/specialist"
-            android:layout_width="145dp"
-            android:layout_height="56dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/total"
-            app:layout_constraintTop_toBottomOf="@id/total"
-            android:layout_marginStart="12dp"
-            android:background="@drawable/background_main_feature"
-            android:gravity="center">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_forum" />
 
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_dr_tech" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/firasans"
+                            android:text="Forum"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/specialist"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/firasans"
-                    android:text="Specialist"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:layout_height="56dp"
+                    android:paddingStart="22dp"
+                    android:paddingEnd="22dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/background_main_feature"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_dr_tech" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/firasans"
+                            android:text="Specialist"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
 
         <TextView
             android:id="@+id/titleForum"
@@ -248,7 +255,7 @@
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/forum" />
+            app:layout_constraintTop_toBottomOf="@id/table" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/forumRecyclerView"

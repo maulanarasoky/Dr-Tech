@@ -66,15 +66,23 @@ class HomeViewModel: ViewModel() {
         listForums.clear()
         for (data in dataSnapshot.children.reversed()) {
             val post = data.getValue(Forum::class.java)
+            val tagsList: MutableList<String> = mutableListOf()
+            val hardwareList: MutableList<String> = mutableListOf()
+            for(tag in dataSnapshot.child(post?.id.toString()).child("tags").children){
+                tagsList.add(tag.value.toString())
+            }
+            for(hardware in dataSnapshot.child(post?.id.toString()).child("hardware").children){
+                hardwareList.add(hardware.value.toString())
+            }
             val x = Forum(
-                dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("title").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("description").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("category").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("tags").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("hardware").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("views").value.toString().toInt(),
-                dataSnapshot.child(post?.id.toString()).child("userId").value.toString()
+                id = dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
+                title = dataSnapshot.child(post?.id.toString()).child("title").value.toString(),
+                description = dataSnapshot.child(post?.id.toString()).child("description").value.toString(),
+                category = dataSnapshot.child(post?.id.toString()).child("category").value.toString(),
+                tags = tagsList,
+                hardware = hardwareList,
+                views = dataSnapshot.child(post?.id.toString()).child("views").value.toString().toInt(),
+                userId = dataSnapshot.child(post?.id.toString()).child("userId").value.toString()
             )
             listForums.add(x)
             count++
