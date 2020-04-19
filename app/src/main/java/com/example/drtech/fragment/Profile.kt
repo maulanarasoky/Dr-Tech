@@ -10,6 +10,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
 import com.example.drtech.activity.Comments
+import com.example.drtech.activity.EditName
 import com.example.drtech.activity.Login
 import com.example.drtech.activity.MainActivity
 import com.example.drtech.model.Comment
@@ -29,6 +30,8 @@ class Profile : Fragment() {
 
     private val listComment: MutableList<Comment> = mutableListOf()
 
+    var userId = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +48,13 @@ class Profile : Fragment() {
 
         getComments()
         getUserName()
+
+        editName.setOnClickListener {
+            startActivity<EditName>(
+                EditName.USER_NAME to userName.text,
+                EditName.ID_USER to userId
+            )
+        }
 
         logOut.setOnClickListener {
             val dialog = SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
@@ -151,6 +161,8 @@ class Profile : Fragment() {
                     val data = p0.getValue(Users::class.java)
                     if(data != null){
                         userName.text = data.name
+                        type.text = data.type
+                        userId = data.id.toString()
                         check = true
                     }
                 }
@@ -165,6 +177,8 @@ class Profile : Fragment() {
                         val data = p0.getValue(Users::class.java)
                         if (data != null) {
                             userName.text = data.name
+                            type.text = data.type
+                            userId = data.id.toString()
                             check = true
                         }
                     }

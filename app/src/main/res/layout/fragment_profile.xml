@@ -43,6 +43,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/toolBar" />
 
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:fontFamily="@font/firasans"
+            android:text="Regular"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userPic"
             android:layout_width="100dp"
@@ -68,6 +83,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/userPic" />
+
+        <ImageView
+            android:id="@+id/editName"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_edit_purple_black"
+            app:layout_constraintStart_toEndOf="@id/userName"
+            app:layout_constraintTop_toTopOf="@id/userName"
+            app:layout_constraintBottom_toBottomOf="@id/userName"
+            android:layout_marginStart="8dp" />
 
         <View
             android:id="@+id/firstDot"
@@ -111,7 +136,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/firasans"
                 android:maxLines="1"
-                android:text="First Comment"
+                android:text="Belum ada komentar"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -156,7 +181,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/firasans"
                 android:maxLines="1"
-                android:text="Second Comment"
+                android:text="Belum ada komentar"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -192,7 +217,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/firasans"
                 android:maxLines="1"
-                android:text="Third Comment"
+                android:text="Belum ada komentar"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>

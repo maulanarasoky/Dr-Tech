@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".activity.Search"></activity>
+        <activity android:name=".activity.EditName"></activity>
+        <activity android:name=".activity.Search" />
         <activity android:name=".activity.Comments" />
         <activity android:name=".activity.ForumDetail" />
         <activity android:name=".activity.AllSpecialists" />

@@ -112,12 +112,14 @@ class Register : AppCompatActivity() {
     }
 
     private fun addRegularAccount(idUser: String?){
-        val data = Users(idUser, name.text.toString(), "Regular", "-", "Verifikasi")
+        val name = name.text.toString().substring(0, 1).toUpperCase() + name.text.toString().substring(1)
+        val data = Users(idUser, name, "Regular", "-", "Verifikasi")
         database.child("Users").child("Regular").child(idUser.toString()).setValue(data)
     }
 
     private fun addSpecialistAccount(idUser: String?){
-        val data = Users(idUser, name.text.toString(), "Specialist", businessName.text.toString(), "Belum Terverifikasi")
+        val name = name.text.toString().substring(0, 1).toUpperCase() + name.text.toString().substring(1)
+        val data = Users(idUser, name, "Specialist", businessName.text.toString(), "Belum Terverifikasi")
         database.child("Users").child("Specialist").child(idUser.toString()).setValue(data)
     }
 }
