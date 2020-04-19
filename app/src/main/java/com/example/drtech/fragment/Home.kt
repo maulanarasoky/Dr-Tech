@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.drtech.R
 import com.example.drtech.activity.AllForums
+import com.example.drtech.activity.AllSpecialists
 import com.example.drtech.adapter.ForumsList
 import com.example.drtech.model.Forum
 import com.example.drtech.viewmodel.HomeViewModel
@@ -50,7 +51,7 @@ class Home : Fragment() {
         }
 
         specialist.setOnClickListener {
-
+            startActivity<AllSpecialists>()
         }
 
         val layoutManager = GridLayoutManager(context, 2)

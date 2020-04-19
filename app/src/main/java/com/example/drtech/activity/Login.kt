@@ -2,10 +2,6 @@ package com.example.drtech.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
@@ -36,10 +32,6 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        dialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-
-        dialog.setCancelable(false)
-
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
@@ -54,11 +46,15 @@ class Login : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         btnLogin.setOnClickListener {
+            dialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+
+            dialog.setCancelable(false)
             if(viewPager.currentItem == 0){
                 loginRegular(email.text.toString(), password.text.toString())
             }else{
                 loginSpecialist(emailSpecialist.text.toString(), passwordSpecialist.text.toString())
             }
+            dialog.show()
         }
 
         btnRegister.setOnClickListener {
@@ -73,18 +69,10 @@ class Login : AppCompatActivity() {
     }
 
     private fun loginRegular(email: String, password: String) {
-        val dialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-        dialog.setCancelable(false)
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { check ->
             if (check.isSuccessful) {
                 if (auth.currentUser?.isEmailVerified!!) {
-                    dialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE)
-                    dialog.titleText = "Login Berhasil"
-                    dialog.setConfirmClickListener {
-                        dialog.dismissWithAnimation()
-                        startActivity<MainActivity>()
-                        this.finish()
-                    }
+                    check(auth.currentUser?.uid.toString(), "Regular", "Specialist")
                 } else {
                     auth.signOut()
                     dialog.changeAlertType(SweetAlertDialog.WARNING_TYPE)
@@ -95,13 +83,33 @@ class Login : AppCompatActivity() {
                 dialog.titleText = check.exception?.message
             }
         }
-        dialog.show()
     }
 
     private fun loginSpecialist(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { check ->
             if (check.isSuccessful) {
                 if (auth.currentUser?.isEmailVerified!!) {
+                    check(auth.currentUser?.uid.toString(), "Specialist", "Regular")
+                } else {
+                    auth.signOut()
+                    dialog.changeAlertType(SweetAlertDialog.WARNING_TYPE)
+                    dialog.titleText = "Silahkan Lakukan Verifikasi Email Terlebih Dahulu"
+                }
+            } else {
+                dialog.changeAlertType(SweetAlertDialog.WARNING_TYPE)
+                dialog.titleText = check.exception?.message
+            }
+        }
+    }
+
+    private fun check(userId: String, type: String, account: String){
+        database.child("Users").child(type).child(userId).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val data = p0.getValue(Users::class.java)
+                if(data != null){
                     dialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE)
                     dialog.titleText = "Login Berhasil"
                     dialog.setConfirmClickListener {
@@ -109,16 +117,13 @@ class Login : AppCompatActivity() {
                         startActivity<MainActivity>()
                         finish()
                     }
-                } else {
-                    auth.signOut()
+                }else{
                     dialog.changeAlertType(SweetAlertDialog.WARNING_TYPE)
-                    dialog.titleText = "Silahkan Lakukan Verifikasi Email Terlebih Dahulu"
+                    dialog.titleText = "Email terdaftar di akun $account"
+                    auth.signOut()
                 }
-            } else {
-                dialog.changeAlertType(SweetAlertDialog.WARNING_TYPE)
-                dialog.titleText = check.exception?.message
             }
-        }
-        dialog.show()
+
+        })
     }
 }

@@ -5,5 +5,7 @@ data class Users (
     val name: String? = "",
     val type: String? = "",
     val business: String? = "",
-    val status: String? = ""
+    val skills: MutableList<String>? = null,
+    val status: String? = "",
+    val ratings: Int? = 0
 )

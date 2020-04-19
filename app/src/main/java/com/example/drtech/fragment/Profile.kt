@@ -9,10 +9,7 @@ import android.view.ViewGroup
 import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
-import com.example.drtech.activity.Comments
-import com.example.drtech.activity.EditName
-import com.example.drtech.activity.Login
-import com.example.drtech.activity.MainActivity
+import com.example.drtech.activity.*
 import com.example.drtech.model.Comment
 import com.example.drtech.model.Users
 import com.google.firebase.auth.FirebaseAuth
@@ -49,11 +46,19 @@ class Profile : Fragment() {
         getComments()
         getUserName()
 
+        showForum.setOnClickListener {
+            startActivity<MyForum>()
+        }
+
         editName.setOnClickListener {
             startActivity<EditName>(
                 EditName.USER_NAME to userName.text,
                 EditName.ID_USER to userId
             )
+        }
+
+        changePassword.setOnClickListener {
+            startActivity<ChangePassword>()
         }
 
         logOut.setOnClickListener {

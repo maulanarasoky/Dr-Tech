@@ -10,27 +10,28 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
 import com.example.drtech.adapter.ForumsList
-import com.example.drtech.adapter.SpecialistList
 import com.example.drtech.interfaces.MyAsyncCallback
 import com.example.drtech.model.Forum
-import com.example.drtech.model.Users
 import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_all_specialists.*
+import kotlinx.android.synthetic.main.activity_my_forum.*
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
 
-class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
+class MyForum : AppCompatActivity(), MyAsyncCallback {
 
     lateinit var database: DatabaseReference
-    private lateinit var adapter: SpecialistList
+    private lateinit var adapter: ForumsList
+    lateinit var auth: FirebaseAuth
 
-    var listSpecialist: MutableList<Users> = mutableListOf()
+    var listForums: MutableList<Forum> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_all_specialists)
+        setContentView(R.layout.activity_my_forum)
 
+        auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
         setSupportActionBar(toolBar)
@@ -39,11 +40,11 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
         HomeAsync(this).execute()
 
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, 2)
-        specialistRecyclerView.layoutManager = layoutManager
+        forumRecyclerView.layoutManager = layoutManager
 
-        adapter = SpecialistList(listSpecialist)
+        adapter = ForumsList(listForums)
 
-        specialistRecyclerView.adapter = adapter
+        forumRecyclerView.adapter = adapter
 
         search_bar.setOnKeyListener(object : View.OnKeyListener{
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
@@ -64,7 +65,7 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
     private fun showForums() {
         progressBar.visibility = View.VISIBLE
         try {
-            database.child("Users").child("Specialist").addValueEventListener(object : ValueEventListener {
+            database.child("Forums").orderByChild("userId").equalTo(auth.currentUser?.uid.toString()).addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
 
@@ -79,23 +80,30 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
     }
 
     private fun showData(dataSnapshot: DataSnapshot) {
-        listSpecialist.clear()
+        listForums.clear()
         for (data in dataSnapshot.children) {
-            val post = data.getValue(Users::class.java)
-            val skillList: MutableList<String> = mutableListOf()
-            for(tag in dataSnapshot.child(post?.id.toString()).child("skills").children){
-                skillList.add(tag.value.toString())
+            val post = data.getValue(Forum::class.java)
+            if (post?.userId == auth.currentUser?.uid.toString()){
+                val tagsList: MutableList<String> = mutableListOf()
+                val hardwareList: MutableList<String> = mutableListOf()
+                for(tag in dataSnapshot.child(post.id.toString()).child("tags").children){
+                    tagsList.add(tag.value.toString())
+                }
+                for(hardware in dataSnapshot.child(post.id.toString()).child("hardware").children){
+                    hardwareList.add(hardware.value.toString())
+                }
+                val x = Forum(
+                    id = dataSnapshot.child(post.id.toString()).child("id").value.toString(),
+                    title = dataSnapshot.child(post.id.toString()).child("title").value.toString(),
+                    description = dataSnapshot.child(post.id.toString()).child("description").value.toString(),
+                    category = dataSnapshot.child(post.id.toString()).child("category").value.toString(),
+                    tags = tagsList,
+                    hardware = hardwareList,
+                    views = dataSnapshot.child(post.id.toString()).child("views").value.toString().toInt(),
+                    userId = dataSnapshot.child(post.id.toString()).child("userId").value.toString()
+                )
+                listForums.add(x)
             }
-            val x = Users(
-                dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("name").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("type").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("business").value.toString(),
-                skillList,
-                dataSnapshot.child(post?.id.toString()).child("status").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("ratings").value.toString().toInt()
-            )
-            listSpecialist.add(x)
         }
         progressBar.visibility = View.GONE
         adapter.notifyDataSetChanged()
@@ -107,7 +115,7 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
         if(title.trim().isNotEmpty()){
             search = title.substring(0, 1).toUpperCase() + title.substring(1)
         }
-        database.child("Users").child("Specialist").orderByChild("name").startAt(search).endAt(search + "\uf8ff").addValueEventListener(object :
+        database.child("Forums").orderByChild("title").startAt(search).endAt(search + "\uf8ff").addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }

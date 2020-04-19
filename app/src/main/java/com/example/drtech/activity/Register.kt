@@ -8,6 +8,7 @@ import com.example.drtech.adapter.ViewPager
 import com.example.drtech.fragment.RegisterRegular
 import com.example.drtech.fragment.RegisterSpecialist
 import com.example.drtech.model.Users
+import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -113,13 +114,18 @@ class Register : AppCompatActivity() {
 
     private fun addRegularAccount(idUser: String?){
         val name = name.text.toString().substring(0, 1).toUpperCase() + name.text.toString().substring(1)
-        val data = Users(idUser, name, "Regular", "-", "Verifikasi")
+        val data = Users(idUser, name, "Regular", "-", null,  "Verifikasi", 0)
         database.child("Users").child("Regular").child(idUser.toString()).setValue(data)
     }
 
     private fun addSpecialistAccount(idUser: String?){
-        val name = name.text.toString().substring(0, 1).toUpperCase() + name.text.toString().substring(1)
-        val data = Users(idUser, name, "Specialist", businessName.text.toString(), "Belum Terverifikasi")
+        val listSkill: MutableList<String> = mutableListOf()
+        for(i in 0 until chipGroupSkill.childCount){
+            val chip = chipGroupSkill.getChildAt(i) as Chip
+            listSkill.add(chip.text.toString())
+        }
+        val name = nameSpecialist.text.toString().substring(0, 1).toUpperCase() + nameSpecialist.text.toString().substring(1)
+        val data = Users(idUser, name, "Specialist", businessName.text.toString(), listSkill,  "Belum Terverifikasi", 0)
         database.child("Users").child("Specialist").child(idUser.toString()).setValue(data)
     }
 }

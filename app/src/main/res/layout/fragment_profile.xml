@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingBottom="60dp">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -227,10 +228,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:divider="?android:listDivider"
+            android:dividerPadding="@dimen/activity_vertical_margin"
             android:orientation="vertical"
             android:showDividers="middle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linear3">
+
+            <LinearLayout
+                android:id="@+id/showForum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="?android:listDivider"
+                android:dividerPadding="16dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin"
+                android:showDividers="middle">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/firasans"
+                    android:text="Forum Saya"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/changePassword"
