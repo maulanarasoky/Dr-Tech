@@ -1,19 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.Profile">
 
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Out"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolBar" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/action_bar"
+            android:theme="@style/Theme.Toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:fontFamily="@font/firasans"
+            android:text="Profile"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/toolBar" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userPic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/background_button_login_register"
+            android:padding="@dimen/activity_vertical_margin"
+            android:src="@drawable/ic_dr_tech"
+            app:layout_constraintBottom_toBottomOf="@id/toolBar"
+            app:layout_constraintEnd_toEndOf="@id/toolBar"
+            app:layout_constraintStart_toStartOf="@id/toolBar"
+            app:layout_constraintTop_toBottomOf="@id/toolBar" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/firasans"
+            android:text="User Name"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userPic" />
+
+        <View
+            android:id="@+id/firstDot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/dot"
+            app:layout_constraintEnd_toStartOf="@id/linear1"
+            app:layout_constraintTop_toBottomOf="@id/userName" />
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="10dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/line_purple_dark"
+            app:layout_constraintBottom_toTopOf="@id/secondDot"
+            app:layout_constraintEnd_toEndOf="@id/firstDot"
+            app:layout_constraintStart_toStartOf="@id/firstDot"
+            app:layout_constraintTop_toTopOf="@id/firstDot" />
+
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@drawable/total_background"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="@id/firstDot"
+            app:layout_constraintEnd_toEndOf="@id/userName"
+            app:layout_constraintStart_toStartOf="@id/userName"
+            app:layout_constraintTop_toTopOf="@id/firstDot">
+
+            <TextView
+                android:id="@+id/firstComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/firasans"
+                android:maxLines="1"
+                android:text="First Comment"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/secondDot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/dot"
+            app:layout_constraintBottom_toBottomOf="@id/line1"
+            app:layout_constraintEnd_toStartOf="@id/linear1"
+            app:layout_constraintTop_toBottomOf="@id/line1" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="10dp"
+            android:layout_height="113dp"
+            android:background="@drawable/line_purple_dark"
+            app:layout_constraintEnd_toEndOf="@id/secondDot"
+            app:layout_constraintStart_toStartOf="@id/secondDot"
+            app:layout_constraintTop_toTopOf="@id/secondDot" />
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@drawable/total_background"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="@id/secondDot"
+            app:layout_constraintEnd_toEndOf="@id/userName"
+            app:layout_constraintStart_toStartOf="@id/userName"
+            app:layout_constraintTop_toTopOf="@id/secondDot">
+
+            <TextView
+                android:id="@+id/secondComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/firasans"
+                android:maxLines="1"
+                android:text="Second Comment"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/thirdDot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/dot"
+            app:layout_constraintBottom_toBottomOf="@id/line2"
+            app:layout_constraintEnd_toStartOf="@id/linear1"
+            app:layout_constraintTop_toBottomOf="@id/line2" />
+
+        <LinearLayout
+            android:id="@+id/linear3"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@drawable/total_background"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="@id/thirdDot"
+            app:layout_constraintEnd_toEndOf="@id/userName"
+            app:layout_constraintStart_toStartOf="@id/userName"
+            app:layout_constraintTop_toTopOf="@id/thirdDot">
+
+            <TextView
+                android:id="@+id/thirdComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/firasans"
+                android:maxLines="1"
+                android:text="Third Comment"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:divider="?android:listDivider"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linear3">
+
+            <LinearLayout
+                android:id="@+id/changePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="?android:listDivider"
+                android:dividerPadding="16dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin"
+                android:showDividers="middle">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/firasans"
+                    android:text="Ubah Password"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/logOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="?android:listDivider"
+                android:dividerPadding="16dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin"
+                android:showDividers="middle">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_log_out" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/firasans"
+                    android:text="Keluar"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

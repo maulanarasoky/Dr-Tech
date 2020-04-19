@@ -118,7 +118,7 @@ class Comments : AppCompatActivity() {
 
     private fun sendComment(name: String){
         val id = database.push().key
-        val data = Comment(id, name, commentText.text.toString(), intent.getStringExtra(FORUM_ID))
+        val data = Comment(id, name, commentText.text.toString(), intent.getStringExtra(FORUM_ID), auth.currentUser?.uid.toString())
         database.child("Comments").child(id.toString()).setValue(data)
         adapter.notifyDataSetChanged()
     }
