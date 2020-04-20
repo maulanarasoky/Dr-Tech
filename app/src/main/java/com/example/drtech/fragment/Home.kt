@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
 import com.example.drtech.activity.AllForums
 import com.example.drtech.activity.AllSpecialists
 import com.example.drtech.adapter.ForumsList
 import com.example.drtech.adapter.SpecialistList
+import com.example.drtech.model.Users
 import com.example.drtech.viewmodel.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -33,6 +35,8 @@ class Home : Fragment() {
 
     private lateinit var mainViewModel: HomeViewModel
 
+    var status = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,11 +50,21 @@ class Home : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
+        showRegularName()
+
         forum.setOnClickListener {
             startActivity<AllForums>()
         }
 
         specialist.setOnClickListener {
+            if(status == "Specialist"){
+                val dialog = SweetAlertDialog(context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                dialog.setCustomImage(resources.getDrawable(R.drawable.ic_dr_tech))
+                dialog.titleText = "Fitur ini tidak tersedia bagi Specialist"
+                dialog.setCancelable(false)
+                dialog.show()
+                return@setOnClickListener
+            }
             startActivity<AllSpecialists>()
         }
 
@@ -101,5 +115,38 @@ class Home : Fragment() {
         }else{
             progressBar.visibility = View.GONE
         }
+    }
+
+    fun showRegularName() {
+        database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val data = p0.getValue(Users::class.java)
+                    if(data == null || data.toString() == "null"){
+                        showSpecialistName()
+                    }else{
+                        status = "Regular"
+                    }
+                }
+            })
+
+    }
+
+    fun showSpecialistName(){
+        database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val data = p0.getValue(Users::class.java)
+                    if(data != null || data.toString() != "null"){
+                        status = "Specialist"
+                    }
+                }
+            })
     }
 }

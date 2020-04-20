@@ -6,17 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.drtech.R
-import com.example.drtech.adapter.ChatData
 import com.example.drtech.adapter.ChatList
 import com.example.drtech.model.Users
-import com.example.drtech.viewmodel.ChatViewModel
+import com.example.drtech.viewmodel.ChatListViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_chat.*
@@ -28,8 +26,9 @@ class Chat : Fragment() {
 
     lateinit var auth: FirebaseAuth
     lateinit var adapter: ChatList
+    lateinit var database: DatabaseReference
 
-    private lateinit var mainViewModel: ChatViewModel
+    private lateinit var mainViewModel: ChatListViewModel
 
     var status = ""
 
@@ -45,8 +44,9 @@ class Chat : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
-        showSenderName()
+        showRegularName()
 
         val linearLayout = LinearLayoutManager(activity)
         chatRecyclerView.layoutManager = linearLayout
@@ -59,9 +59,9 @@ class Chat : Fragment() {
         )
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            ChatViewModel::class.java)
-        mainViewModel.showMyChats(auth.currentUser?.uid.toString())
-        mainViewModel.getDataChats().observe(this, Observer { chatList ->
+            ChatListViewModel::class.java)
+        mainViewModel.showRegularChat(auth.currentUser?.uid.toString())
+        mainViewModel.getData().observe(this, Observer { chatList ->
             adapter = ChatList(chatList, activity!!, status)
             chatRecyclerView.adapter = adapter
             chatRecyclerView.visibility = View.VISIBLE
@@ -69,9 +69,7 @@ class Chat : Fragment() {
         })
     }
 
-    fun showSenderName() {
-        val database: DatabaseReference = FirebaseDatabase.getInstance().reference
-        var check = false
+    fun showRegularName() {
         database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -79,27 +77,29 @@ class Chat : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if (data != null) {
+                    if(data == null || data.toString() == "null"){
+                        showSpecialistName()
+                    }else{
                         status = "Regular"
-                        check = true
                     }
                 }
             })
-        if (check == false) {
-            database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-                    }
 
-                    override fun onDataChange(p0: DataSnapshot) {
-                        val data = p0.getValue(Users::class.java)
-                        if (data != null) {
-                            status = "Specialist"
-                            check = true
-                        }
+    }
+
+    fun showSpecialistName(){
+        database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val data = p0.getValue(Users::class.java)
+                    if(data != null || data.toString() != "null"){
+                        status = "Specialist"
                     }
-                })
-        }
+                }
+            })
     }
 
 }

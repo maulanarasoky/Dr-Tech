@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.drtech.R
 import com.example.drtech.adapter.ChatData
 import com.example.drtech.model.Chat
+import com.example.drtech.model.LastChat
 import com.example.drtech.viewmodel.ChatViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -57,26 +58,15 @@ class Chat : AppCompatActivity() {
     }
 
     private fun sendMessage(senderId: String, receiverId: String, message: String){
-        val complexId1 = "$senderId - $receiverId"
-        val complexId2 = "$receiverId - $senderId"
         val id = database.push().key
         val data = Chat(id, senderId, receiverId, message)
 
         database.child("Chats").child(id.toString()).setValue(data)
 
-        database.child("ChatGroups").child(complexId1).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+        val idGroup = database.push().key
+        val lastChat = LastChat(idGroup, id, senderId, receiverId, message)
 
-            override fun onDataChange(p0: DataSnapshot) {
-                val x = p0.getValue(Chat::class.java)
-                if(x != null){
-                    database.child("ChatGroups").child(complexId1).child(id.toString()).setValue(id)
-                }else{
-                    database.child("ChatGroups").child(complexId2).child(id.toString()).setValue(id)
-                }
-            }
-
-        })
+        database.child("LastChat").child(senderId).child(receiverId).setValue(lastChat)
+        database.child("LastChat").child(receiverId).child(senderId).setValue(lastChat)
     }
 }
