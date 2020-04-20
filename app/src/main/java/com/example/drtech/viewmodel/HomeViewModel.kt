@@ -16,6 +16,9 @@ class HomeViewModel: ViewModel() {
     val forumLiveData = MutableLiveData<MutableList<Forum>>()
     var listForums: MutableList<Forum> = mutableListOf()
 
+    val specialistLiveData = MutableLiveData<MutableList<Users>>()
+    val listSpecialists: MutableList<Users> = mutableListOf()
+
     val totalForums = MutableLiveData<Long>()
     val totalSpecialists = MutableLiveData<Long>()
     val totalTags = MutableLiveData<Long>()
@@ -33,7 +36,7 @@ class HomeViewModel: ViewModel() {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-                    showData(p0)
+                    getForum(p0)
                 }
 
             })
@@ -84,8 +87,43 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    fun showData(dataSnapshot: DataSnapshot) {
-        var count = 1
+    fun showSpecialist(){
+        database.child("Users").child("Specialist").orderByChild("ratings").limitToLast(5).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                getSpecialist(p0)
+            }
+
+        })
+    }
+
+    fun getSpecialist(dataSnapshot: DataSnapshot){
+        listSpecialists.clear()
+        for(data in dataSnapshot.children.reversed()){
+            val post = data.getValue(Users::class.java)
+            if(dataSnapshot.child(post?.id.toString()).child("status").value.toString() == "Terverifikasi"){
+                val skillList: MutableList<String> = mutableListOf()
+                for(tag in dataSnapshot.child(post?.id.toString()).child("skills").children){
+                    skillList.add(tag.value.toString())
+                }
+                val x = Users(
+                    dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
+                    dataSnapshot.child(post?.id.toString()).child("name").value.toString(),
+                    dataSnapshot.child(post?.id.toString()).child("type").value.toString(),
+                    dataSnapshot.child(post?.id.toString()).child("business").value.toString(),
+                    skillList,
+                    dataSnapshot.child(post?.id.toString()).child("status").value.toString(),
+                    dataSnapshot.child(post?.id.toString()).child("phoneNumber").value.toString()
+                )
+                listSpecialists.add(x)
+            }
+        }
+        specialistLiveData.postValue(listSpecialists)
+    }
+
+    fun getForum(dataSnapshot: DataSnapshot) {
         listForums.clear()
         for (data in dataSnapshot.children.reversed()) {
             val post = data.getValue(Forum::class.java)
@@ -108,7 +146,6 @@ class HomeViewModel: ViewModel() {
                 userId = dataSnapshot.child(post?.id.toString()).child("userId").value.toString()
             )
             listForums.add(x)
-            count++
         }
         forumLiveData.postValue(listForums)
     }
@@ -145,8 +182,12 @@ class HomeViewModel: ViewModel() {
         })
     }
 
-    fun getForums(): LiveData<MutableList<Forum>> {
+    fun getDataForums(): LiveData<MutableList<Forum>> {
         return forumLiveData
+    }
+
+    fun getDataSpecialists(): LiveData<MutableList<Users>>{
+        return specialistLiveData
     }
 
     fun getTotalForums(): LiveData<Long>{

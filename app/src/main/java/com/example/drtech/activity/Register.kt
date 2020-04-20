@@ -114,7 +114,7 @@ class Register : AppCompatActivity() {
 
     private fun addRegularAccount(idUser: String?){
         val name = name.text.toString().substring(0, 1).toUpperCase() + name.text.toString().substring(1)
-        val data = Users(idUser, name, "Regular", "-", null,  "Verifikasi", 0)
+        val data = Users(idUser, name, "Regular", "-", null,  "Verifikasi", "0")
         database.child("Users").child("Regular").child(idUser.toString()).setValue(data)
     }
 
@@ -125,7 +125,7 @@ class Register : AppCompatActivity() {
             listSkill.add(chip.text.toString())
         }
         val name = nameSpecialist.text.toString().substring(0, 1).toUpperCase() + nameSpecialist.text.toString().substring(1)
-        val data = Users(idUser, name, "Specialist", businessName.text.toString(), listSkill,  "Belum Terverifikasi", 0)
+        val data = Users(idUser, name, "Specialist", businessName.text.toString(), listSkill,  "Belum Terverifikasi", phoneNumber.text.toString())
         database.child("Users").child("Specialist").child(idUser.toString()).setValue(data)
     }
 }

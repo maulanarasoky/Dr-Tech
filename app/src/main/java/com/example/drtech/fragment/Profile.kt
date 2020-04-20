@@ -6,12 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
 
 import com.example.drtech.R
 import com.example.drtech.activity.*
 import com.example.drtech.model.Comment
 import com.example.drtech.model.Users
+import com.example.drtech.viewmodel.HomeViewModel
+import com.example.drtech.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -25,9 +29,9 @@ class Profile : Fragment() {
     lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference
 
-    private val listComment: MutableList<Comment> = mutableListOf()
-
     var userId = ""
+
+    lateinit var mainViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +47,68 @@ class Profile : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        getComments()
         getUserName()
+
+        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            ProfileViewModel::class.java)
+        mainViewModel.getComments()
+        mainViewModel.getData().observe(this, Observer { commentList ->
+            when(commentList.size){
+                1 -> {
+                    firstComment.text = commentList[0].comment
+                    linear1.setOnClickListener {
+                        startActivity<Comments>(
+                            Comments.FORUM_ID to commentList[0].forumId
+                        )
+                        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    }
+                }
+                2 -> {
+                    firstComment.text = commentList[0].comment
+                    secondComment.text = commentList[1].comment
+
+                    linear1.setOnClickListener {
+                        startActivity<Comments>(
+                            Comments.FORUM_ID to commentList[0].forumId
+                        )
+                        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    }
+
+                    linear2.setOnClickListener {
+                        startActivity<Comments>(
+                            Comments.FORUM_ID to commentList[1].forumId
+                        )
+                        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    }
+                }
+                3 -> {
+                    firstComment.text = commentList[0].comment
+                    secondComment.text = commentList[1].comment
+                    thirdComment.text = commentList[2].comment
+
+                    linear1.setOnClickListener {
+                        startActivity<Comments>(
+                            Comments.FORUM_ID to commentList[0].forumId
+                        )
+                        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    }
+
+                    linear2.setOnClickListener {
+                        startActivity<Comments>(
+                            Comments.FORUM_ID to commentList[1].forumId
+                        )
+                        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    }
+
+                    linear3.setOnClickListener {
+                        startActivity<Comments>(
+                            Comments.FORUM_ID to commentList[2].forumId
+                        )
+                        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    }
+                }
+            }
+        })
 
         showForum.setOnClickListener {
             startActivity<MyForum>()
@@ -75,83 +139,6 @@ class Profile : Fragment() {
                 activity?.startActivityForResult(intent, MainActivity.checkLogin)
             }
             dialog.show()
-        }
-    }
-
-    private fun getComments(){
-        database.child("Comments").orderByChild("userId").equalTo(auth.currentUser?.uid.toString()).limitToLast(3).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                showComments(p0)
-            }
-
-        })
-    }
-
-    private fun showComments(dataSnapshot: DataSnapshot){
-        for(i in dataSnapshot.children.reversed()){
-            val data = i.getValue(Comment::class.java)
-            if (data != null) {
-                listComment.add(data)
-            }
-        }
-
-        when(listComment.size){
-            1 -> {
-                firstComment.text = listComment[0].comment
-                linear1.setOnClickListener {
-                    startActivity<Comments>(
-                        Comments.FORUM_ID to listComment[0].forumId
-                    )
-                    activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-                }
-            }
-            2 -> {
-                firstComment.text = listComment[0].comment
-                secondComment.text = listComment[1].comment
-
-                linear1.setOnClickListener {
-                    startActivity<Comments>(
-                        Comments.FORUM_ID to listComment[0].forumId
-                    )
-                    activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-                }
-
-                linear2.setOnClickListener {
-                    startActivity<Comments>(
-                        Comments.FORUM_ID to listComment[1].forumId
-                    )
-                    activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-                }
-            }
-            3 -> {
-                firstComment.text = listComment[0].comment
-                secondComment.text = listComment[1].comment
-                thirdComment.text = listComment[2].comment
-
-                linear1.setOnClickListener {
-                    startActivity<Comments>(
-                        Comments.FORUM_ID to listComment[0].forumId
-                    )
-                    activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-                }
-
-                linear2.setOnClickListener {
-                    startActivity<Comments>(
-                        Comments.FORUM_ID to listComment[1].forumId
-                    )
-                    activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-                }
-
-                linear3.setOnClickListener {
-                    startActivity<Comments>(
-                        Comments.FORUM_ID to listComment[2].forumId
-                    )
-                    activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-                }
-            }
         }
     }
 

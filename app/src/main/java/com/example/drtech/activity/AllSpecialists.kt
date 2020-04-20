@@ -93,7 +93,7 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
                 dataSnapshot.child(post?.id.toString()).child("business").value.toString(),
                 skillList,
                 dataSnapshot.child(post?.id.toString()).child("status").value.toString(),
-                dataSnapshot.child(post?.id.toString()).child("ratings").value.toString().toInt()
+                dataSnapshot.child(post?.id.toString()).child("phoneNumber").value.toString()
             )
             listSpecialist.add(x)
         }

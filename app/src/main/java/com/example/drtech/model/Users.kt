@@ -1,5 +1,9 @@
 package com.example.drtech.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Users (
     val id: String? = "",
     val name: String? = "",
@@ -7,5 +11,5 @@ data class Users (
     val business: String? = "",
     val skills: MutableList<String>? = null,
     val status: String? = "",
-    val ratings: Int? = 0
-)
+    val phoneNumber: String? = ""
+): Parcelable

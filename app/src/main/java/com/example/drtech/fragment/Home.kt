@@ -1,6 +1,7 @@
 package com.example.drtech.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.example.drtech.R
 import com.example.drtech.activity.AllForums
 import com.example.drtech.activity.AllSpecialists
 import com.example.drtech.adapter.ForumsList
-import com.example.drtech.model.Forum
+import com.example.drtech.adapter.SpecialistList
 import com.example.drtech.viewmodel.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -27,9 +28,8 @@ class Home : Fragment() {
 
     lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference
-    private lateinit var adapter: ForumsList
-
-    var listForums: MutableList<Forum> = mutableListOf()
+    private lateinit var adapterForum: ForumsList
+    private lateinit var adapterSpecialist: SpecialistList
 
     private lateinit var mainViewModel: HomeViewModel
 
@@ -54,17 +54,26 @@ class Home : Fragment() {
             startActivity<AllSpecialists>()
         }
 
-        val layoutManager = GridLayoutManager(context, 2)
-        forumRecyclerView.layoutManager = layoutManager
+        val forumLayout = GridLayoutManager(context, 2)
+        forumRecyclerView.layoutManager = forumLayout
+        val specialistLayout = GridLayoutManager(context, 2)
+        specialistRecyclerView.layoutManager = specialistLayout
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(HomeViewModel::class.java)
         mainViewModel.showForums(firstLetter, userName)
+        mainViewModel.showSpecialist()
         mainViewModel.showTotal()
         showLoading(true)
-        mainViewModel.getForums().observe(this, Observer { forumItems ->
+        mainViewModel.getDataForums().observe(this, Observer { forumItems ->
             if (forumItems != null) {
-                adapter = ForumsList(forumItems)
-                forumRecyclerView.adapter = adapter
+                adapterForum = ForumsList(forumItems)
+                forumRecyclerView.adapter = adapterForum
+            }
+        })
+        mainViewModel.getDataSpecialists().observe(this, Observer { specialistItems ->
+            if(specialistItems != null){
+                adapterSpecialist = SpecialistList(specialistItems)
+                specialistRecyclerView.adapter = adapterSpecialist
                 showLoading(false)
                 table.visibility = View.VISIBLE
                 titleForum.visibility = View.VISIBLE

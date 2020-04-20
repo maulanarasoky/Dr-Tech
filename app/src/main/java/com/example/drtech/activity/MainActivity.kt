@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import com.example.drtech.R
 import com.example.drtech.fragment.AddForum
+import com.example.drtech.fragment.Chat
 import com.example.drtech.fragment.Home
 import com.example.drtech.fragment.Profile
 import com.google.firebase.auth.FirebaseAuth
@@ -55,6 +56,14 @@ class MainActivity : AppCompatActivity() {
                         loadProfileFragment()
                     }
                 }
+                R.id.chat -> {
+                    if (auth.currentUser == null) {
+                        val intent = Intent(this, Login::class.java)
+                        startActivityForResult(intent, checkLogin)
+                    } else {
+                        loadChatFragment()
+                    }
+                }
             }
             true
         }
@@ -82,6 +91,13 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_layout, Profile(), Profile::class.java.simpleName)
+            .commit()
+    }
+
+    private fun loadChatFragment(){
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_layout, Chat(), Chat::class.java.simpleName)
             .commit()
     }
 

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.drtech.R
 import com.example.drtech.activity.ForumDetail
+import com.example.drtech.activity.SpecialistDetail
 import com.example.drtech.model.Forum
 import com.example.drtech.model.Users
 import com.google.firebase.database.FirebaseDatabase
@@ -31,7 +32,6 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
         LayoutContainer {
         fun bindItem(items: Users) {
             specialistName.text = items.name
-            specialistFavorite.text = items.ratings.toString()
 
             val stringBuilder = StringBuilder()
 
@@ -50,6 +50,13 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
             specialistSkills.text = "Keahlian : $stringBuilder"
 
             Glide.with(itemView.context).load(R.drawable.ic_dr_tech).into(forum_pic)
+
+            itemView.setOnClickListener {
+                itemView.context.startActivity<SpecialistDetail>(
+                    SpecialistDetail.DATA to items,
+                    "skills" to stringBuilder
+                )
+            }
         }
     }
 }

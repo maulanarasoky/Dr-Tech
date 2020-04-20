@@ -44,7 +44,13 @@ class RegisterSpecialist : Fragment() {
     }
 
     private fun inputChip(chipGroup: ChipGroup, editText: EditText){
-        val chipValue = editText.text.toString().replace(" ", "")
+        if(chipGroup.childCount == 3){
+            showAlert("Maksimal 3 keahlian")
+            return
+        }
+
+        val text = editText.text.toString().substring(0, 1).toUpperCase() + editText.text.toString().substring(1)
+        val chipValue = text.toString().replace(" ", "")
         for(i in 0 until chipGroup.childCount){
             val data = chipGroup.getChildAt(i) as Chip
             if(data.text.toString() == chipValue){
@@ -63,11 +69,7 @@ class RegisterSpecialist : Fragment() {
         chip.setOnCloseIconClickListener {
             chipGroup.removeView(it)
         }
-        if(chipGroup.childCount == 3){
-            showAlert("Masing-masing tag maksimal 3")
-        }else{
-            chipGroup.addView(chip)
-        }
+        chipGroup.addView(chip)
         chipGroup.visibility = View.VISIBLE
     }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Comments">
+    tools:context=".activity.Chat">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:fontFamily="@font/firasans"
-        android:text="Komentar"
+        android:text="Chat"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -59,7 +59,7 @@
         app:layout_constraintTop_toTopOf="@id/toolBar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/commentsRecyclerView"
+        android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -85,7 +85,7 @@
         android:layout_marginEnd="60dp"
         android:background="@drawable/background_comment"
         android:fontFamily="@font/firasans"
-        android:hint="Komentar"
+        android:hint="Message"
         android:textCursorDrawable="@drawable/color_cursor"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
