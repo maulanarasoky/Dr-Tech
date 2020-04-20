@@ -26,6 +26,10 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class Profile : Fragment() {
 
+    companion object{
+        const val CHANGE_NAME = 101
+    }
+
     lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference
 
@@ -116,11 +120,11 @@ class Profile : Fragment() {
         }
 
         editName.setOnClickListener {
-            startActivity<EditName>(
-                EditName.USER_NAME to userName.text,
-                EditName.ID_USER to userId,
-                EditName.TYPE_USER to typeUser
-            )
+            val intent = Intent(activity, EditName::class.java)
+            intent.putExtra(EditName.USER_NAME, userName.text)
+            intent.putExtra(EditName.ID_USER, userId)
+            intent.putExtra(EditName.TYPE_USER, typeUser)
+            activity?.startActivityForResult(intent, CHANGE_NAME)
         }
 
         changePassword.setOnClickListener {
@@ -147,7 +151,7 @@ class Profile : Fragment() {
     private fun getUserName(){
         var check = false
         database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
-            .addValueEventListener(object : ValueEventListener {
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
 

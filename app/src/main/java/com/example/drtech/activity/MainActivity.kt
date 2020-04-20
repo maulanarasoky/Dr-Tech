@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity() {
         Log.d("RESULT CODE", resultCode.toString())
         if (requestCode == checkLogin){
             bottom_navigation.selectedItemId = R.id.home
+        }else if(requestCode == Profile.CHANGE_NAME){
+            bottom_navigation.selectedItemId = R.id.profile
         }
     }
 }

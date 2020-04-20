@@ -65,7 +65,7 @@ class EditName : AppCompatActivity() {
 
     private fun getSenderName(beforeName: String, name: String){
         Log.d("SENDER", beforeName)
-        database.root.child("Chats").orderByChild("senderName").equalTo(beforeName).addValueEventListener(object : ValueEventListener{
+        database.root.child("Chats").orderByChild("senderName").equalTo(beforeName).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 
