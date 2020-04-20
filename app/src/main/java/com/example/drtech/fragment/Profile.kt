@@ -30,6 +30,7 @@ class Profile : Fragment() {
     lateinit var database: DatabaseReference
 
     var userId = ""
+    var typeUser = ""
 
     lateinit var mainViewModel: ProfileViewModel
 
@@ -117,7 +118,8 @@ class Profile : Fragment() {
         editName.setOnClickListener {
             startActivity<EditName>(
                 EditName.USER_NAME to userName.text,
-                EditName.ID_USER to userId
+                EditName.ID_USER to userId,
+                EditName.TYPE_USER to typeUser
             )
         }
 
@@ -155,6 +157,7 @@ class Profile : Fragment() {
                         userName.text = data.name
                         type.text = data.type
                         userId = data.id.toString()
+                        typeUser = data.type.toString()
                         check = true
                     }
                 }
@@ -171,6 +174,7 @@ class Profile : Fragment() {
                             userName.text = data.name
                             type.text = data.type
                             userId = data.id.toString()
+                            typeUser = data.type.toString()
                             check = true
                         }
                     }

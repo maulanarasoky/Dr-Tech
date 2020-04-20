@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/purpleDark</color>
-    <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">@color/purpleDark</color>
-    <color name="statusBar">#5bbcf7</color>
     <color name="purpleDark">#3A2C60</color>
 </resources>

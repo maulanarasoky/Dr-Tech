@@ -8,13 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:paddingEnd">0dp</item>
-        <item name="android:backgroundTint">@android:color/white</item>
-        <item name="android:fontFamily">@font/firasans</item>
-    </style>
-
     <style name="Theme.Toolbar" parent="android:Theme.Holo">
         <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_white</item>
     </style>
