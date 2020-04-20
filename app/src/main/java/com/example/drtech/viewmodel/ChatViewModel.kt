@@ -53,7 +53,7 @@ class ChatViewModel: ViewModel() {
     fun showMyChats(senderId: String){
         database = FirebaseDatabase.getInstance().reference
 
-        database.child("Chats").addValueEventListener(object : ValueEventListener{
+        database.child("Chats").orderByChild("receiverId").equalTo(senderId).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 

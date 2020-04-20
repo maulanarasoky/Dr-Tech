@@ -9,10 +9,8 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
-import com.example.drtech.adapter.ForumsList
 import com.example.drtech.adapter.SpecialistList
 import com.example.drtech.interfaces.MyAsyncCallback
-import com.example.drtech.model.Forum
 import com.example.drtech.model.Users
 import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
@@ -61,10 +59,10 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
         }
     }
 
-    private fun showForums() {
+    private fun showSpecialists() {
         progressBar.visibility = View.VISIBLE
         try {
-            database.child("Users").child("Specialist").addValueEventListener(object : ValueEventListener {
+            database.child("Users").child("Specialist").orderByChild("name").addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
 
@@ -130,7 +128,7 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
         }
 
         override fun doInBackground(vararg params: Void?) {
-            showForums()
+            showSpecialists()
         }
 
         override fun onPostExecute(result: Unit?) {

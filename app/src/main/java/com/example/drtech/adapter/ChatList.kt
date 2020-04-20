@@ -34,7 +34,7 @@ class ChatList(private val items: List<Chat>, private val activity: Activity, pr
 
             itemView.setOnClickListener {
                 itemView.context.startActivity<com.example.drtech.activity.Chat>(
-                    com.example.drtech.activity.Chat.SPECIALIST_ID to items.receiverId
+                    com.example.drtech.activity.Chat.SPECIALIST_ID to items.senderId.toString()
                 )
                 activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
             }
