@@ -41,43 +41,7 @@ class ChatViewModel: ViewModel() {
                 val x = Chat(
                     dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
                     dataSnapshot.child(post?.id.toString()).child("senderId").value.toString(),
-                    dataSnapshot.child(post?.id.toString()).child("receiverId").value.toString(),
-                    dataSnapshot.child(post?.id.toString()).child("message").value.toString()
-                )
-                listChat.add(x)
-            }
-        }
-        chatLiveData.postValue(listChat)
-    }
-
-    fun showMyChats(senderId: String){
-        database = FirebaseDatabase.getInstance().reference
-
-        database.child("Chats").orderByChild("receiverId").equalTo(senderId).addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                val data = p0.getValue(Chat::class.java)
-                if(data != null){
-                    getMyChat(p0, senderId)
-                    Log.d("SIZE DATA", p0.childrenCount.toString())
-                }
-            }
-
-        })
-    }
-
-    private fun getMyChat(dataSnapshot: DataSnapshot, senderId: String){
-        listChat.clear()
-        for(data in dataSnapshot.children){
-            val post = data.getValue(Chat::class.java)
-            val condition1 = dataSnapshot.child(post?.id.toString()).child("senderId").value.toString() == senderId
-            val condition2 = dataSnapshot.child(post?.id.toString()).child("receiverId").value.toString() == senderId
-            if(condition1 || condition2){
-                val x = Chat(
-                    dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
-                    dataSnapshot.child(post?.id.toString()).child("senderId").value.toString(),
+                    dataSnapshot.child(post?.id.toString()).child("senderName").value.toString(),
                     dataSnapshot.child(post?.id.toString()).child("receiverId").value.toString(),
                     dataSnapshot.child(post?.id.toString()).child("message").value.toString()
                 )

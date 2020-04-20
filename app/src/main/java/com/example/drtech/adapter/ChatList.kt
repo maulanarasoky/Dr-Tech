@@ -1,14 +1,13 @@
 package com.example.drtech.adapter
 
 import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
-import com.example.drtech.model.Chat
+import com.example.drtech.activity.Chat
 import com.example.drtech.model.LastChat
 import com.example.drtech.model.Users
 import com.google.firebase.auth.FirebaseAuth
@@ -47,8 +46,9 @@ class ChatList(private val items: List<LastChat>, private val activity: Activity
             userComment.text = items.message
 
             itemView.setOnClickListener {
-                itemView.context.startActivity<com.example.drtech.activity.Chat>(
-                    com.example.drtech.activity.Chat.SPECIALIST_ID to id
+                itemView.context.startActivity<Chat>(
+                    Chat.RECEIVER_ID to id,
+                    Chat.SENDER_NAME to userName.text
                 )
                 activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
             }
