@@ -168,7 +168,7 @@ class Profile : Fragment() {
             })
         if(check == false) {
             database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
-                .addValueEventListener(object : ValueEventListener {
+                .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
                     }
 
