@@ -85,7 +85,7 @@ class Login : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                loginSpecialist(email.text.toString(), password.text.toString())
+                loginSpecialist(specialistEmail.text.toString(), specialistPassword.text.toString())
             }
             dialog.show()
         }

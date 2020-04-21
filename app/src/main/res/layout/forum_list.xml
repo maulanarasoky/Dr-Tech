@@ -55,8 +55,8 @@
 
         <ImageView
             android:id="@+id/pic_views"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/ic_views_white"
             app:layout_constraintBottom_toBottomOf="@id/totalViews"
