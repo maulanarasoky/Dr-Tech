@@ -11,5 +11,6 @@ data class Users(
     val business: String? = "",
     val skills: MutableList<String>? = null,
     val status: String? = "",
-    val phoneNumber: String? = ""
+    val phoneNumber: String? = "",
+    val favorite: Int? = 0
 ) : Parcelable

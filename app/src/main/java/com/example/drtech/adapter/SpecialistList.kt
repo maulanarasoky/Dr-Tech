@@ -35,6 +35,7 @@ class SpecialistList(private val items: List<Users>) :
             showRegularName()
 
             specialistName.text = items.name
+            specialistFavorite.text = items.favorite.toString()
 
             val stringBuilder = StringBuilder()
 

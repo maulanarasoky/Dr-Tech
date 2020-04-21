@@ -26,6 +26,39 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
+            android:id="@+id/totalFavorite"
+            android:layout_width="61dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/background_category_views"
+            app:layout_constraintEnd_toEndOf="@id/forum_pic"
+            app:layout_constraintTop_toTopOf="@id/forum_pic" />
+
+        <ImageView
+            android:id="@+id/pic_favorite"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_favorite_white"
+            app:layout_constraintBottom_toBottomOf="@id/totalFavorite"
+            app:layout_constraintStart_toStartOf="@id/totalFavorite"
+            app:layout_constraintTop_toTopOf="@id/totalFavorite" />
+
+        <TextView
+            android:id="@+id/specialistFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/firasans"
+            android:text="1456"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/pic_favorite"
+            app:layout_constraintEnd_toEndOf="@id/totalFavorite"
+            app:layout_constraintStart_toEndOf="@id/pic_favorite"
+            app:layout_constraintTop_toTopOf="@id/pic_favorite" />
+
+        <View
             android:id="@+id/backgroundTitle"
             android:layout_width="match_parent"
             android:layout_height="70dp"

@@ -90,7 +90,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun showSpecialist() {
-        database.child("Users").child("Specialist").orderByChild("ratings").limitToLast(5)
+        database.child("Users").child("Specialist").orderByChild("favorite").limitToLast(5)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
@@ -120,7 +120,8 @@ class HomeViewModel : ViewModel() {
                     dataSnapshot.child(post?.id.toString()).child("business").value.toString(),
                     skillList,
                     dataSnapshot.child(post?.id.toString()).child("status").value.toString(),
-                    dataSnapshot.child(post?.id.toString()).child("phoneNumber").value.toString()
+                    dataSnapshot.child(post?.id.toString()).child("phoneNumber").value.toString(),
+                    dataSnapshot.child(post?.id.toString()).child("favorite").value.toString().toInt()
                 )
                 listSpecialists.add(x)
             }
