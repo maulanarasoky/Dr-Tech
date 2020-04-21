@@ -1,8 +1,8 @@
 package com.example.drtech.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
 import com.example.drtech.model.Chat
@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_edit_name.*
 
 class EditName : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val ID_USER = "ID_USER"
         const val USER_NAME = "USER_NAME"
         const val TYPE_USER = "TYPE_USER"
@@ -36,14 +36,15 @@ class EditName : AppCompatActivity() {
         }
     }
 
-    private fun changeName(beforeName: String){
-        val name = userName.text.toString().substring(0, 1).toUpperCase() + userName.text.toString().substring(1)
+    private fun changeName(beforeName: String) {
+        val name = userName.text.toString().substring(0, 1).toUpperCase() + userName.text.toString()
+            .substring(1)
         val userId: String = intent.getStringExtra(ID_USER)
         val typeUser: String = intent.getStringExtra(TYPE_USER)
 
-        if(typeUser == "Regular"){
+        if (typeUser == "Regular") {
             database.child("Regular").child(userId).child("name").setValue(name)
-        }else{
+        } else {
             database.child("Specialist").child(userId).child("name").setValue(name)
         }
 
@@ -63,24 +64,26 @@ class EditName : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun getSenderName(beforeName: String, name: String){
+    private fun getSenderName(beforeName: String, name: String) {
         Log.d("SENDER", beforeName)
-        database.root.child("Chats").orderByChild("senderName").equalTo(beforeName).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+        database.root.child("Chats").orderByChild("senderName").equalTo(beforeName)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                updateSenderName(p0, name)
-                Log.d("NAME", p0.toString())
-            }
+                override fun onDataChange(p0: DataSnapshot) {
+                    updateSenderName(p0, name)
+                    Log.d("NAME", p0.toString())
+                }
 
-        })
+            })
     }
 
-    private fun updateSenderName(dataSnapshot: DataSnapshot, name: String){
-        for (i in dataSnapshot.children){
+    private fun updateSenderName(dataSnapshot: DataSnapshot, name: String) {
+        for (i in dataSnapshot.children) {
             val post = i.getValue(Chat::class.java)
-            database.root.child("Chats").child(post?.id.toString()).child("senderName").setValue(name)
+            database.root.child("Chats").child(post?.id.toString()).child("senderName")
+                .setValue(name)
         }
     }
 }

@@ -9,7 +9,8 @@ import com.example.drtech.model.Comment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.comment_list.*
 
-class CommentList(private val items: List<Comment>) : RecyclerView.Adapter<CommentList.ViewHolder>() {
+class CommentList(private val items: List<Comment>) :
+    RecyclerView.Adapter<CommentList.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.comment_list, parent, false)

@@ -1,17 +1,9 @@
 package com.example.drtech.activity
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.graphics.drawable.DrawableCompat
+import androidx.appcompat.app.AppCompatActivity
 import com.example.drtech.R
 import com.example.drtech.fragment.AddForum
 import com.example.drtech.fragment.Chat
@@ -19,7 +11,6 @@ import com.example.drtech.fragment.Home
 import com.example.drtech.fragment.Profile
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -68,33 +59,33 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             bottom_navigation.selectedItemId = R.id.home
         }
     }
 
-    private fun loadHomeFragment(){
+    private fun loadHomeFragment() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_layout, Home(), Home::class.java.simpleName)
             .commit()
     }
 
-    private fun loadAddForumFragment(){
+    private fun loadAddForumFragment() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_layout, AddForum(), AddForum::class.java.simpleName)
             .commit()
     }
 
-    private fun loadProfileFragment(){
+    private fun loadProfileFragment() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_layout, Profile(), Profile::class.java.simpleName)
             .commit()
     }
 
-    private fun loadChatFragment(){
+    private fun loadChatFragment() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_layout, Chat(), Chat::class.java.simpleName)
@@ -105,9 +96,9 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("REQUEST CODE", requestCode.toString())
         Log.d("RESULT CODE", resultCode.toString())
-        if (requestCode == checkLogin){
+        if (requestCode == checkLogin) {
             bottom_navigation.selectedItemId = R.id.home
-        }else if(requestCode == Profile.CHANGE_NAME){
+        } else if (requestCode == Profile.CHANGE_NAME) {
             bottom_navigation.selectedItemId = R.id.profile
         }
     }

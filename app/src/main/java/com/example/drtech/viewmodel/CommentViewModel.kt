@@ -6,29 +6,30 @@ import androidx.lifecycle.ViewModel
 import com.example.drtech.model.Comment
 import com.google.firebase.database.*
 
-class CommentViewModel: ViewModel() {
+class CommentViewModel : ViewModel() {
 
     val commentLiveData = MutableLiveData<MutableList<Comment>>()
     val listComment: MutableList<Comment> = mutableListOf()
 
     lateinit var database: DatabaseReference
 
-    fun showComments(forumId: String){
+    fun showComments(forumId: String) {
         database = FirebaseDatabase.getInstance().reference
-        database.child("Comments").orderByChild("forumId").equalTo(forumId).addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+        database.child("Comments").orderByChild("forumId").equalTo(forumId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                showData(p0)
-            }
+                override fun onDataChange(p0: DataSnapshot) {
+                    showData(p0)
+                }
 
-        })
+            })
     }
 
-    fun showData(dataSnapshot: DataSnapshot){
+    fun showData(dataSnapshot: DataSnapshot) {
         listComment.clear()
-        for(data in dataSnapshot.children){
+        for (data in dataSnapshot.children) {
             val post = data.getValue(Comment::class.java)
             val comment = Comment(
                 dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
@@ -41,7 +42,7 @@ class CommentViewModel: ViewModel() {
         commentLiveData.postValue(listComment)
     }
 
-    fun getComments(): LiveData<MutableList<Comment>>{
+    fun getComments(): LiveData<MutableList<Comment>> {
         return commentLiveData
     }
 

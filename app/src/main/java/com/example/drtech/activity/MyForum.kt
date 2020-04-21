@@ -1,11 +1,11 @@
 package com.example.drtech.activity
 
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
@@ -39,16 +39,23 @@ class MyForum : AppCompatActivity(), MyAsyncCallback {
 
         HomeAsync(this).execute()
 
-        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, 2)
-        forumRecyclerView.layoutManager = layoutManager
+        if (listForums.size > 0) {
+            val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, 2)
+            forumRecyclerView.layoutManager = layoutManager
+            forumRecyclerView.visibility = View.VISIBLE
 
-        adapter = ForumsList(listForums)
+            adapter = ForumsList(listForums)
 
-        forumRecyclerView.adapter = adapter
+            forumRecyclerView.adapter = adapter
+        } else {
+            search_bar.isEnabled = false
+            forumRecyclerView.visibility = View.GONE
+            textNoData.visibility = View.VISIBLE
+        }
 
-        search_bar.setOnKeyListener(object : View.OnKeyListener{
+        search_bar.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                if (event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     search(search_bar.text.toString())
                     toast("Mencari").show()
                     return true
@@ -65,15 +72,17 @@ class MyForum : AppCompatActivity(), MyAsyncCallback {
     private fun showForums() {
         progressBar.visibility = View.VISIBLE
         try {
-            database.child("Forums").orderByChild("userId").equalTo(auth.currentUser?.uid.toString()).addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                }
+            database.child("Forums").orderByChild("userId")
+                .equalTo(auth.currentUser?.uid.toString())
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    showData(p0)
-                }
+                    override fun onDataChange(p0: DataSnapshot) {
+                        showData(p0)
+                    }
 
-            })
+                })
         } catch (e: FirebaseException) {
             Log.d("ERROR", e.message.toString())
         }
@@ -83,48 +92,55 @@ class MyForum : AppCompatActivity(), MyAsyncCallback {
         listForums.clear()
         for (data in dataSnapshot.children) {
             val post = data.getValue(Forum::class.java)
-            if (post?.userId == auth.currentUser?.uid.toString()){
+            if (post?.userId == auth.currentUser?.uid.toString()) {
                 val tagsList: MutableList<String> = mutableListOf()
                 val hardwareList: MutableList<String> = mutableListOf()
-                for(tag in dataSnapshot.child(post.id.toString()).child("tags").children){
+                for (tag in dataSnapshot.child(post.id.toString()).child("tags").children) {
                     tagsList.add(tag.value.toString())
                 }
-                for(hardware in dataSnapshot.child(post.id.toString()).child("hardware").children){
+                for (hardware in dataSnapshot.child(post.id.toString())
+                    .child("hardware").children) {
                     hardwareList.add(hardware.value.toString())
                 }
                 val x = Forum(
                     id = dataSnapshot.child(post.id.toString()).child("id").value.toString(),
                     title = dataSnapshot.child(post.id.toString()).child("title").value.toString(),
-                    description = dataSnapshot.child(post.id.toString()).child("description").value.toString(),
-                    category = dataSnapshot.child(post.id.toString()).child("category").value.toString(),
+                    description = dataSnapshot.child(post.id.toString())
+                        .child("description").value.toString(),
+                    category = dataSnapshot.child(post.id.toString())
+                        .child("category").value.toString(),
                     tags = tagsList,
                     hardware = hardwareList,
-                    views = dataSnapshot.child(post.id.toString()).child("views").value.toString().toInt(),
+                    views = dataSnapshot.child(post.id.toString()).child("views").value.toString()
+                        .toInt(),
                     userId = dataSnapshot.child(post.id.toString()).child("userId").value.toString()
                 )
                 listForums.add(x)
             }
         }
         progressBar.visibility = View.GONE
-        adapter.notifyDataSetChanged()
+        if (this::adapter.isInitialized) {
+            adapter.notifyDataSetChanged()
+        }
     }
 
-    private fun search(title: String){
+    private fun search(title: String) {
         progressBar.visibility = View.VISIBLE
         var search = title
-        if(title.trim().isNotEmpty()){
+        if (title.trim().isNotEmpty()) {
             search = title.substring(0, 1).toUpperCase() + title.substring(1)
         }
-        database.child("Forums").orderByChild("title").startAt(search).endAt(search + "\uf8ff").addValueEventListener(object :
-            ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
+        database.child("Forums").orderByChild("title").startAt(search).endAt(search + "\uf8ff")
+            .addValueEventListener(object :
+                ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                showData(p0)
-            }
+                override fun onDataChange(p0: DataSnapshot) {
+                    showData(p0)
+                }
 
-        })
+            })
     }
 
     inner class HomeAsync(listener: MyAsyncCallback) : AsyncTask<Void, Unit, Unit>() {

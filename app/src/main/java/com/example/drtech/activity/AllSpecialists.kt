@@ -1,11 +1,11 @@
 package com.example.drtech.activity
 
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drtech.R
@@ -43,9 +43,10 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
 
         specialistRecyclerView.adapter = adapter
 
-        search_bar.setOnKeyListener(object : View.OnKeyListener{
+        search_bar.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                if(event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                if (event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    textNoData.visibility = View.GONE
                     search(search_bar.text.toString())
                     toast("Mencari").show()
                     return true
@@ -62,15 +63,16 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
     private fun showSpecialists() {
         progressBar.visibility = View.VISIBLE
         try {
-            database.child("Users").child("Specialist").orderByChild("name").addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                }
+            database.child("Users").child("Specialist").orderByChild("name")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    showData(p0)
-                }
+                    override fun onDataChange(p0: DataSnapshot) {
+                        showData(p0)
+                    }
 
-            })
+                })
         } catch (e: FirebaseException) {
             Log.d("ERROR", e.message.toString())
         }
@@ -81,7 +83,7 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
         for (data in dataSnapshot.children) {
             val post = data.getValue(Users::class.java)
             val skillList: MutableList<String> = mutableListOf()
-            for(tag in dataSnapshot.child(post?.id.toString()).child("skills").children){
+            for (tag in dataSnapshot.child(post?.id.toString()).child("skills").children) {
                 skillList.add(tag.value.toString())
             }
             val x = Users(
@@ -97,15 +99,19 @@ class AllSpecialists : AppCompatActivity(), MyAsyncCallback {
         }
         progressBar.visibility = View.GONE
         adapter.notifyDataSetChanged()
+        if (listSpecialist.size == 0) {
+            textNoData.visibility = View.VISIBLE
+        }
     }
 
-    private fun search(title: String){
+    private fun search(title: String) {
         progressBar.visibility = View.VISIBLE
         var search = title
-        if(title.trim().isNotEmpty()){
+        if (title.trim().isNotEmpty()) {
             search = title.substring(0, 1).toUpperCase() + title.substring(1)
         }
-        database.child("Users").child("Specialist").orderByChild("name").startAt(search).endAt(search + "\uf8ff").addValueEventListener(object :
+        database.child("Users").child("Specialist").orderByChild("name").startAt(search)
+            .endAt(search + "\uf8ff").addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }

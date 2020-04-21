@@ -11,7 +11,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel : ViewModel() {
 
     val forumLiveData = MutableLiveData<MutableList<Forum>>()
     var listForums: MutableList<Forum> = mutableListOf()
@@ -30,16 +30,17 @@ class HomeViewModel: ViewModel() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
         try {
-            database.child("Forums").orderByChild("views").limitToLast(5).addValueEventListener(object :
-                ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                }
+            database.child("Forums").orderByChild("views").limitToLast(5)
+                .addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    getForum(p0)
-                }
+                    override fun onDataChange(p0: DataSnapshot) {
+                        getForum(p0)
+                    }
 
-            })
+                })
             if (auth.currentUser != null) {
                 var check = false
                 database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
@@ -49,7 +50,7 @@ class HomeViewModel: ViewModel() {
 
                         override fun onDataChange(p0: DataSnapshot) {
                             val data = p0.getValue(Users::class.java)
-                            if(data != null){
+                            if (data != null) {
                                 val name = data.name.toString()
                                 val letter = name.toCharArray()
                                 val firstName = name.split(" ").toTypedArray()
@@ -59,15 +60,16 @@ class HomeViewModel: ViewModel() {
                             }
                         }
                     })
-                if(check == false){
-                    database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
+                if (check == false) {
+                    database.child("Users").child("Specialist")
+                        .child(auth.currentUser?.uid.toString())
                         .addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                             }
 
                             override fun onDataChange(p0: DataSnapshot) {
                                 val data = p0.getValue(Users::class.java)
-                                if(data != null){
+                                if (data != null) {
                                     val name = data.name.toString()
                                     val letter = name.toCharArray()
                                     val firstName = name.split(" ").toTypedArray()
@@ -78,7 +80,7 @@ class HomeViewModel: ViewModel() {
                             }
                         })
                 }
-            }else{
+            } else {
                 firstLetter.text = "A"
                 userName.text = "Anonymous"
             }
@@ -87,25 +89,28 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    fun showSpecialist(){
-        database.child("Users").child("Specialist").orderByChild("ratings").limitToLast(5).addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+    fun showSpecialist() {
+        database.child("Users").child("Specialist").orderByChild("ratings").limitToLast(5)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                getSpecialist(p0)
-            }
+                override fun onDataChange(p0: DataSnapshot) {
+                    getSpecialist(p0)
+                }
 
-        })
+            })
     }
 
-    fun getSpecialist(dataSnapshot: DataSnapshot){
+    fun getSpecialist(dataSnapshot: DataSnapshot) {
         listSpecialists.clear()
-        for(data in dataSnapshot.children.reversed()){
+        for (data in dataSnapshot.children.reversed()) {
             val post = data.getValue(Users::class.java)
-            if(dataSnapshot.child(post?.id.toString()).child("status").value.toString() == "Terverifikasi"){
+            if (dataSnapshot.child(post?.id.toString())
+                    .child("status").value.toString() == "Terverifikasi"
+            ) {
                 val skillList: MutableList<String> = mutableListOf()
-                for(tag in dataSnapshot.child(post?.id.toString()).child("skills").children){
+                for (tag in dataSnapshot.child(post?.id.toString()).child("skills").children) {
                     skillList.add(tag.value.toString())
                 }
                 val x = Users(
@@ -129,20 +134,23 @@ class HomeViewModel: ViewModel() {
             val post = data.getValue(Forum::class.java)
             val tagsList: MutableList<String> = mutableListOf()
             val hardwareList: MutableList<String> = mutableListOf()
-            for(tag in dataSnapshot.child(post?.id.toString()).child("tags").children){
+            for (tag in dataSnapshot.child(post?.id.toString()).child("tags").children) {
                 tagsList.add(tag.value.toString())
             }
-            for(hardware in dataSnapshot.child(post?.id.toString()).child("hardware").children){
+            for (hardware in dataSnapshot.child(post?.id.toString()).child("hardware").children) {
                 hardwareList.add(hardware.value.toString())
             }
             val x = Forum(
                 id = dataSnapshot.child(post?.id.toString()).child("id").value.toString(),
                 title = dataSnapshot.child(post?.id.toString()).child("title").value.toString(),
-                description = dataSnapshot.child(post?.id.toString()).child("description").value.toString(),
-                category = dataSnapshot.child(post?.id.toString()).child("category").value.toString(),
+                description = dataSnapshot.child(post?.id.toString())
+                    .child("description").value.toString(),
+                category = dataSnapshot.child(post?.id.toString())
+                    .child("category").value.toString(),
                 tags = tagsList,
                 hardware = hardwareList,
-                views = dataSnapshot.child(post?.id.toString()).child("views").value.toString().toInt(),
+                views = dataSnapshot.child(post?.id.toString()).child("views").value.toString()
+                    .toInt(),
                 userId = dataSnapshot.child(post?.id.toString()).child("userId").value.toString()
             )
             listForums.add(x)
@@ -150,8 +158,8 @@ class HomeViewModel: ViewModel() {
         forumLiveData.postValue(listForums)
     }
 
-    fun showTotal(){
-        database.child("Forums").addListenerForSingleValueEvent(object : ValueEventListener{
+    fun showTotal() {
+        database.child("Forums").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
 
@@ -161,17 +169,18 @@ class HomeViewModel: ViewModel() {
 
         })
 
-        database.child("Users").child("Specialist").addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+        database.child("Users").child("Specialist")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                totalSpecialists.postValue(p0.childrenCount)
-            }
+                override fun onDataChange(p0: DataSnapshot) {
+                    totalSpecialists.postValue(p0.childrenCount)
+                }
 
-        })
+            })
 
-        database.child("Tags").addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child("Tags").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
 
@@ -186,19 +195,19 @@ class HomeViewModel: ViewModel() {
         return forumLiveData
     }
 
-    fun getDataSpecialists(): LiveData<MutableList<Users>>{
+    fun getDataSpecialists(): LiveData<MutableList<Users>> {
         return specialistLiveData
     }
 
-    fun getTotalForums(): LiveData<Long>{
+    fun getTotalForums(): LiveData<Long> {
         return totalForums
     }
 
-    fun getTotalSpecialist(): LiveData<Long>{
+    fun getTotalSpecialist(): LiveData<Long> {
         return totalSpecialists
     }
 
-    fun getTotalTags(): LiveData<Long>{
+    fun getTotalTags(): LiveData<Long> {
         return totalTags
     }
 

@@ -1,7 +1,6 @@
 package com.example.drtech.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +56,7 @@ class Home : Fragment() {
         }
 
         specialist.setOnClickListener {
-            if(status == "Specialist"){
+            if (status == "Specialist") {
                 val dialog = SweetAlertDialog(context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                 dialog.setCustomImage(resources.getDrawable(R.drawable.ic_dr_tech))
                 dialog.titleText = "Fitur ini tidak tersedia bagi Specialist"
@@ -73,22 +72,25 @@ class Home : Fragment() {
         val specialistLayout = GridLayoutManager(context, 2)
         specialistRecyclerView.layoutManager = specialistLayout
 
-        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(HomeViewModel::class.java)
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(HomeViewModel::class.java)
         mainViewModel.showForums(firstLetter, userName)
         mainViewModel.showSpecialist()
         mainViewModel.showTotal()
         showLoading(true)
         mainViewModel.getDataForums().observe(this, Observer { forumItems ->
-            if (forumItems != null) {
+            if (forumItems.size > 0) {
                 adapterForum = ForumsList(forumItems)
                 forumRecyclerView.adapter = adapterForum
             }
         })
         mainViewModel.getDataSpecialists().observe(this, Observer { specialistItems ->
-            if(specialistItems != null){
+            if (specialistItems.size > 0) {
+                showLoading(false)
                 adapterSpecialist = SpecialistList(specialistItems)
                 specialistRecyclerView.adapter = adapterSpecialist
-                showLoading(false)
                 table.visibility = View.VISIBLE
                 titleForum.visibility = View.VISIBLE
                 forumRecyclerView.visibility = View.VISIBLE
@@ -97,22 +99,22 @@ class Home : Fragment() {
             }
         })
         mainViewModel.getTotalForums().observe(this, Observer { totalForum ->
-            totalForums.text =  "$totalForum Forum"
+            totalForums.text = "$totalForum Forum"
         })
 
         mainViewModel.getTotalSpecialist().observe(this, Observer { totalSpecialist ->
-            totalSpecialists.text =  "$totalSpecialist Specialist"
+            totalSpecialists.text = "$totalSpecialist Specialist"
         })
 
         mainViewModel.getTotalTags().observe(this, Observer { totalTag ->
-            totalTags.text =  "$totalTag Tag"
+            totalTags.text = "$totalTag Tag"
         })
     }
 
-    private fun showLoading(state: Boolean){
-        if (state){
+    private fun showLoading(state: Boolean) {
+        if (state) {
             progressBar.visibility = View.VISIBLE
-        }else{
+        } else {
             progressBar.visibility = View.GONE
         }
     }
@@ -125,9 +127,9 @@ class Home : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data == null || data.toString() == "null"){
+                    if (data == null || data.toString() == "null") {
                         showSpecialistName()
-                    }else{
+                    } else {
                         status = "Regular"
                     }
                 }
@@ -135,7 +137,7 @@ class Home : Fragment() {
 
     }
 
-    fun showSpecialistName(){
+    fun showSpecialistName() {
         database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -143,7 +145,7 @@ class Home : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data != null || data.toString() != "null"){
+                    if (data != null || data.toString() != "null") {
                         status = "Specialist"
                     }
                 }

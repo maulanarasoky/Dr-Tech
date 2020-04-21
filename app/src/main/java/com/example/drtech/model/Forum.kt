@@ -13,4 +13,4 @@ data class Forum(
     val hardware: MutableList<String>? = null,
     val views: Int? = 0,
     val userId: String? = ""
-): Parcelable
+) : Parcelable

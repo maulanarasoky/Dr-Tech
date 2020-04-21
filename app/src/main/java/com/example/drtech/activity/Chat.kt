@@ -1,8 +1,8 @@
 package com.example.drtech.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_chat.*
 
 class Chat : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val RECEIVER_ID = "RECEIVER_ID"
         const val SENDER_NAME = "SENDER_NAME"
     }
@@ -50,12 +50,15 @@ class Chat : AppCompatActivity() {
         chatRecyclerView.setHasFixedSize(true)
 
 
-        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(ChatViewModel::class.java)
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(ChatViewModel::class.java)
         mainViewModel.showChats(auth.currentUser?.uid.toString(), receiverId)
         mainViewModel.getDataChats().observe(this, Observer { chatList ->
             adapter = ChatData(chatList, senderName[0])
             chatRecyclerView.adapter = adapter
-            if(chatList.size > 0){
+            if (chatList.size > 0) {
                 chatRecyclerView.smoothScrollToPosition(chatList.size - 1)
             }
             Log.d("WEWEW", chatList.toString())
@@ -71,7 +74,7 @@ class Chat : AppCompatActivity() {
         }
     }
 
-    private fun sendMessage(senderId: String, receiverId: String, message: String){
+    private fun sendMessage(senderId: String, receiverId: String, message: String) {
         val id = database.push().key
         var senderName = myName.split(" ")
         val data = Chat(id, senderId, senderName[0], receiverId, message)
@@ -85,7 +88,7 @@ class Chat : AppCompatActivity() {
         database.child("LastChat").child(receiverId).child(senderId).setValue(lastChat)
     }
 
-    private fun showName(){
+    private fun showName() {
         var check = false
         database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
             .addValueEventListener(object : ValueEventListener {
@@ -94,14 +97,14 @@ class Chat : AppCompatActivity() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data != null){
+                    if (data != null) {
                         myName = data.name.toString()
                         senderName = myName.split(" ")
                         check = true
                     }
                 }
             })
-        if(check == false){
+        if (check == false) {
             database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
@@ -109,7 +112,7 @@ class Chat : AppCompatActivity() {
 
                     override fun onDataChange(p0: DataSnapshot) {
                         val data = p0.getValue(Users::class.java)
-                        if(data != null){
+                        if (data != null) {
                             myName = data.name.toString()
                             senderName = myName.split(" ")
                             check = true

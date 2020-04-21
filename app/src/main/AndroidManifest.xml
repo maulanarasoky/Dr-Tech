@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".activity.Chat"></activity>
+        <activity android:name=".activity.RegisterSpecialist"></activity>
+        <activity android:name=".activity.Chat" />
         <activity android:name=".activity.SpecialistDetail" />
         <activity android:name=".activity.MyForum" />
         <activity android:name=".activity.ChangePassword" />

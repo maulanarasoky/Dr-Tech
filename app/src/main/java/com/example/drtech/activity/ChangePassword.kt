@@ -1,8 +1,8 @@
 package com.example.drtech.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
 import com.google.firebase.auth.AuthCredential
@@ -70,6 +70,7 @@ class ChangePassword : AppCompatActivity() {
             dialog.show()
         }
     }
+
     private fun changePassword() {
         val dialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
         dialog.setCancelable(false)

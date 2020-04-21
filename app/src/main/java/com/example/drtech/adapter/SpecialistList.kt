@@ -7,18 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.drtech.R
-import com.example.drtech.activity.ForumDetail
 import com.example.drtech.activity.SpecialistDetail
-import com.example.drtech.model.Forum
 import com.example.drtech.model.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.specialist_list.*
 import org.jetbrains.anko.startActivity
-import java.lang.StringBuilder
 
-class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<SpecialistList.ViewHolder>() {
+class SpecialistList(private val items: List<Users>) :
+    RecyclerView.Adapter<SpecialistList.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.specialist_list, parent, false)
@@ -40,12 +38,12 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
 
             val stringBuilder = StringBuilder()
 
-            if(items.skills != null){
-                for(i in 0 until items.skills.size){
+            if (items.skills != null) {
+                for (i in 0 until items.skills.size) {
                     var text = ""
-                    if(i != items.skills.size - 1){
+                    if (i != items.skills.size - 1) {
                         text = items.skills[i] + ", "
-                    }else{
+                    } else {
                         text = items.skills[i]
                     }
                     stringBuilder.append(text)
@@ -57,8 +55,9 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
             Glide.with(itemView.context).load(R.drawable.ic_dr_tech).into(forum_pic)
 
             itemView.setOnClickListener {
-                if(status == "Specialist"){
-                    val dialog = SweetAlertDialog(itemView.context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                if (status == "Specialist") {
+                    val dialog =
+                        SweetAlertDialog(itemView.context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                     dialog.setCustomImage(itemView.resources.getDrawable(R.drawable.ic_dr_tech))
                     dialog.titleText = "Fitur ini tidak tersedia bagi Specialist"
                     dialog.setCancelable(false)
@@ -82,9 +81,9 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
 
                     override fun onDataChange(p0: DataSnapshot) {
                         val data = p0.getValue(Users::class.java)
-                        if(data == null || data.toString() == "null"){
+                        if (data == null || data.toString() == "null") {
                             showSpecialistName()
-                        }else{
+                        } else {
                             status = "Regular"
                         }
                     }
@@ -92,7 +91,7 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
 
         }
 
-        fun showSpecialistName(){
+        fun showSpecialistName() {
             val database: DatabaseReference = FirebaseDatabase.getInstance().reference
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
             database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
@@ -102,7 +101,7 @@ class SpecialistList(private val items: List<Users>) : RecyclerView.Adapter<Spec
 
                     override fun onDataChange(p0: DataSnapshot) {
                         val data = p0.getValue(Users::class.java)
-                        if(data != null || data.toString() != "null"){
+                        if (data != null || data.toString() != "null") {
                             status = "Specialist"
                         }
                     }

@@ -7,7 +7,7 @@ import com.example.drtech.model.Comment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class ProfileViewModel: ViewModel() {
+class ProfileViewModel : ViewModel() {
 
     val commentLiveData = MutableLiveData<MutableList<Comment>>()
     val listComment: MutableList<Comment> = mutableListOf()
@@ -16,11 +16,11 @@ class ProfileViewModel: ViewModel() {
     lateinit var auth: FirebaseAuth
 
 
-
-    fun getComments(){
+    fun getComments() {
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
-        database.child("Comments").orderByChild("userId").equalTo(auth.currentUser?.uid.toString()).limitToLast(3).addListenerForSingleValueEvent(object :
+        database.child("Comments").orderByChild("userId").equalTo(auth.currentUser?.uid.toString())
+            .limitToLast(3).addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -32,8 +32,8 @@ class ProfileViewModel: ViewModel() {
         })
     }
 
-    private fun showComments(dataSnapshot: DataSnapshot){
-        for(i in dataSnapshot.children.reversed()){
+    private fun showComments(dataSnapshot: DataSnapshot) {
+        for (i in dataSnapshot.children.reversed()) {
             val data = i.getValue(Comment::class.java)
             if (data != null) {
                 listComment.add(data)
@@ -42,7 +42,7 @@ class ProfileViewModel: ViewModel() {
         commentLiveData.postValue(listComment)
     }
 
-    fun getData(): LiveData<MutableList<Comment>>{
+    fun getData(): LiveData<MutableList<Comment>> {
         return commentLiveData
     }
 

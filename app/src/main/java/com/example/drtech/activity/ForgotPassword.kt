@@ -1,9 +1,9 @@
 package com.example.drtech.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
+import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.drtech.R
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +19,7 @@ class ForgotPassword : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        btnForgotPass.setOnClickListener {
+        btnSubmit.setOnClickListener {
             if (TextUtils.isEmpty(email.text.toString().trim())) {
                 email.error = "Email harus diisi"
                 return@setOnClickListener

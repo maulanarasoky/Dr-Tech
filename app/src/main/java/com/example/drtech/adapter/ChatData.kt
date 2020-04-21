@@ -14,7 +14,8 @@ import com.google.firebase.database.*
 import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.anko.find
 
-class ChatData(private val items: List<Chat>, private val name: String) : RecyclerView.Adapter<ChatData.ViewHolder>() {
+class ChatData(private val items: List<Chat>, private val name: String) :
+    RecyclerView.Adapter<ChatData.ViewHolder>() {
 
     private val MESSAGE_LEFT = 0
     private val MESSAGE_RIGHT = 1
@@ -25,10 +26,14 @@ class ChatData(private val items: List<Chat>, private val name: String) : Recycl
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.d("TEMBELEK", viewType.toString())
-        return if(viewType == MESSAGE_LEFT){
-            ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.chat_item_left, parent, false))
-        }else{
-            ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.chat_item_right, parent, false))
+        return if (viewType == MESSAGE_LEFT) {
+            ViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.chat_item_left, parent, false)
+            )
+        } else {
+            ViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.chat_item_right, parent, false)
+            )
         }
     }
 
@@ -36,9 +41,9 @@ class ChatData(private val items: List<Chat>, private val name: String) : Recycl
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var senderName = ""
-        if(items[position].senderName == name){
+        if (items[position].senderName == name) {
             senderName = "Anda"
-        }else{
+        } else {
             senderName = items[position].senderName.toString()
         }
         holder.name.text = senderName
@@ -47,14 +52,14 @@ class ChatData(private val items: List<Chat>, private val name: String) : Recycl
 
     override fun getItemViewType(position: Int): Int {
         auth = FirebaseAuth.getInstance()
-        return if (items[position].senderId.equals(auth.currentUser?.uid)){
+        return if (items[position].senderId.equals(auth.currentUser?.uid)) {
             MESSAGE_RIGHT
-        }else{
+        } else {
             MESSAGE_LEFT
         }
     }
 
-    private fun showName(){
+    private fun showName() {
         val database: DatabaseReference = FirebaseDatabase.getInstance().reference
         var check = false
         database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
@@ -64,13 +69,13 @@ class ChatData(private val items: List<Chat>, private val name: String) : Recycl
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data != null){
+                    if (data != null) {
                         myName = data.name.toString()
                         check = true
                     }
                 }
             })
-        if(check == false){
+        if (check == false) {
             database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
@@ -78,7 +83,7 @@ class ChatData(private val items: List<Chat>, private val name: String) : Recycl
 
                     override fun onDataChange(p0: DataSnapshot) {
                         val data = p0.getValue(Users::class.java)
-                        if(data != null){
+                        if (data != null) {
                             myName = data.name.toString()
                             check = true
                         }

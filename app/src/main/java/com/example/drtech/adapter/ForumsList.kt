@@ -1,7 +1,5 @@
 package com.example.drtech.adapter
 
-import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.drtech.R
 import com.example.drtech.activity.ForumDetail
-import com.example.drtech.activity.Login
 import com.example.drtech.model.Forum
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.extensions.LayoutContainer
@@ -36,11 +33,11 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
 
             var photo = 0
 
-            if(items.category == "Laptop"){
+            if (items.category == "Laptop") {
                 photo = R.drawable.laptop
-            }else if(items.category == "Komputer"){
+            } else if (items.category == "Komputer") {
                 photo = R.drawable.computer
-            }else if(items.category == "Hp"){
+            } else if (items.category == "Hp") {
                 photo = R.drawable.smartphone
             }
 
@@ -54,7 +51,7 @@ class ForumsList(private val items: List<Forum>) : RecyclerView.Adapter<ForumsLi
             }
         }
 
-        private fun updateViews(id: String, views: String){
+        private fun updateViews(id: String, views: String) {
             val database = FirebaseDatabase.getInstance().reference.child("Forums")
             val view = views.toInt() + 1
             database.child(id).child("views").setValue(view)

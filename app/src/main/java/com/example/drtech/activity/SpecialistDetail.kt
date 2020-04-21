@@ -2,8 +2,8 @@ package com.example.drtech.activity
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.drtech.R
 import com.example.drtech.model.Users
 import com.google.firebase.auth.FirebaseAuth
@@ -12,7 +12,7 @@ import org.jetbrains.anko.startActivity
 
 class SpecialistDetail : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val DATA = "DATA"
     }
 
@@ -29,16 +29,16 @@ class SpecialistDetail : AppCompatActivity() {
 
         userName.text = parcelData.name
         businessName.text = parcelData.business
-        specialistSkills.text = "Keahlian : $skills"
+        specialistSkills.text = skills
 
         chat.setOnClickListener {
-            if(auth.currentUser != null){
+            if (auth.currentUser != null) {
                 startActivity<Chat>(
                     Chat.RECEIVER_ID to parcelData.id,
                     Chat.SENDER_NAME to parcelData.name
                 )
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-            }else{
+            } else {
                 startActivity<Login>()
                 finish()
             }

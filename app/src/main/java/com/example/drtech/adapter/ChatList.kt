@@ -16,7 +16,11 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.comment_list.*
 import org.jetbrains.anko.startActivity
 
-class ChatList(private val items: List<LastChat>, private val activity: Activity, private val status: String) : RecyclerView.Adapter<ChatList.ViewHolder>() {
+class ChatList(
+    private val items: List<LastChat>,
+    private val activity: Activity,
+    private val status: String
+) : RecyclerView.Adapter<ChatList.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.comment_list, parent, false)
@@ -34,12 +38,11 @@ class ChatList(private val items: List<LastChat>, private val activity: Activity
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
             var id = ""
-            if(items.senderId.toString() == auth.currentUser?.uid){
-                showSenderName(userName,items.receiverId.toString())
+            if (items.senderId.toString() == auth.currentUser?.uid) {
+                showSenderName(userName, items.receiverId.toString())
                 id = items.receiverId.toString()
-            }
-            else if(items.receiverId.toString() == auth.currentUser?.uid){
-                showSenderName(userName,items.senderId.toString())
+            } else if (items.receiverId.toString() == auth.currentUser?.uid) {
+                showSenderName(userName, items.senderId.toString())
                 id = items.senderId.toString()
             }
 
@@ -65,14 +68,14 @@ class ChatList(private val items: List<LastChat>, private val activity: Activity
                         val data = p0.getValue(Users::class.java)
                         if (data != null) {
                             userName.text = data.name.toString()
-                        }else{
+                        } else {
                             showSpecialistName(userName, senderId)
                         }
                     }
                 })
         }
 
-        fun showSpecialistName(userName: TextView, senderId: String){
+        fun showSpecialistName(userName: TextView, senderId: String) {
             val database: DatabaseReference = FirebaseDatabase.getInstance().reference
             database.child("Users").child("Specialist").child(senderId)
                 .addValueEventListener(object : ValueEventListener {

@@ -2,15 +2,14 @@ package com.example.drtech.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.example.drtech.R
 import com.example.drtech.adapter.ChatList
 import com.example.drtech.model.Users
@@ -59,13 +58,17 @@ class Chat : Fragment() {
         )
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            ChatListViewModel::class.java)
+            ChatListViewModel::class.java
+        )
         mainViewModel.showRegularChat(auth.currentUser?.uid.toString())
         mainViewModel.getData().observe(this, Observer { chatList ->
-            adapter = ChatList(chatList, activity!!, status)
-            chatRecyclerView.adapter = adapter
-            chatRecyclerView.visibility = View.VISIBLE
-            Log.d("WEWEW", chatList.toString())
+            if (chatList.size > 0) {
+                adapter = ChatList(chatList, activity!!, status)
+                chatRecyclerView.adapter = adapter
+                chatRecyclerView.visibility = View.VISIBLE
+                textNoData.visibility = View.GONE
+                Log.d("WEWEW", chatList.toString())
+            }
         })
     }
 
@@ -77,9 +80,9 @@ class Chat : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data == null || data.toString() == "null"){
+                    if (data == null || data.toString() == "null") {
                         showSpecialistName()
-                    }else{
+                    } else {
                         status = "Regular"
                     }
                 }
@@ -87,7 +90,7 @@ class Chat : Fragment() {
 
     }
 
-    fun showSpecialistName(){
+    fun showSpecialistName() {
         database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -95,7 +98,7 @@ class Chat : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data != null || data.toString() != "null"){
+                    if (data != null || data.toString() != "null") {
                         status = "Specialist"
                     }
                 }

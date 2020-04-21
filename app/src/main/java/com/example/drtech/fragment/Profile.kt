@@ -2,19 +2,16 @@ package com.example.drtech.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
-
 import com.example.drtech.R
 import com.example.drtech.activity.*
-import com.example.drtech.model.Comment
 import com.example.drtech.model.Users
-import com.example.drtech.viewmodel.HomeViewModel
 import com.example.drtech.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -26,7 +23,7 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class Profile : Fragment() {
 
-    companion object{
+    companion object {
         const val CHANGE_NAME = 101
     }
 
@@ -55,12 +52,20 @@ class Profile : Fragment() {
         getUserName()
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            ProfileViewModel::class.java)
+            ProfileViewModel::class.java
+        )
         mainViewModel.getComments()
         mainViewModel.getData().observe(this, Observer { commentList ->
-            when(commentList.size){
+            when (commentList.size) {
+                0 -> {
+                    firstComment.text = "Belum ada komentar"
+                    secondComment.text = "Belum ada komentar"
+                    thirdComment.text = "Belum ada komentar"
+                }
                 1 -> {
                     firstComment.text = commentList[0].comment
+                    secondComment.text = "Belum ada komentar"
+                    thirdComment.text = "Belum ada komentar"
                     linear1.setOnClickListener {
                         startActivity<Comments>(
                             Comments.FORUM_ID to commentList[0].forumId
@@ -71,7 +76,7 @@ class Profile : Fragment() {
                 2 -> {
                     firstComment.text = commentList[0].comment
                     secondComment.text = commentList[1].comment
-
+                    thirdComment.text = "Belum ada komentar"
                     linear1.setOnClickListener {
                         startActivity<Comments>(
                             Comments.FORUM_ID to commentList[0].forumId
@@ -148,7 +153,7 @@ class Profile : Fragment() {
         }
     }
 
-    private fun getUserName(){
+    private fun getUserName() {
         var check = false
         database.child("Users").child("Regular").child(auth.currentUser?.uid.toString())
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -157,7 +162,7 @@ class Profile : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val data = p0.getValue(Users::class.java)
-                    if(data != null){
+                    if (data != null) {
                         userName.text = data.name
                         type.text = data.type
                         userId = data.id.toString()
@@ -166,7 +171,7 @@ class Profile : Fragment() {
                     }
                 }
             })
-        if(check == false) {
+        if (check == false) {
             database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {

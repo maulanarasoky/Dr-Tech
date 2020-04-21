@@ -1,9 +1,8 @@
 package com.example.drtech.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.example.drtech.R
 import com.example.drtech.model.Forum
 import com.example.drtech.model.Users
@@ -13,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_forrum_detail.*
 import org.jetbrains.anko.startActivity
 
 class ForumDetail : AppCompatActivity() {
-    companion object{
+    companion object {
         const val data = "FORUM"
         const val COUNT_COMMENT = 100
     }
@@ -35,41 +34,43 @@ class ForumDetail : AppCompatActivity() {
         forum_description.text = parcelData?.description
 
         var check = false
-        database.child("Users").child("Regular").child(parcelData?.userId.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                val user = p0.getValue(Users::class.java)
-                if(user != null){
-                    forum_owner.text = "By : " + user.name
-                    check = true
-                }
-            }
-
-        })
-
-        if(check == false){
-            database.child("Users").child("Specialist").child(parcelData?.userId.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child("Users").child("Regular").child(parcelData?.userId.toString())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val user = p0.getValue(Users::class.java)
-                    if(user != null){
+                    if (user != null) {
                         forum_owner.text = "By : " + user.name
                         check = true
                     }
                 }
 
             })
+
+        if (check == false) {
+            database.child("Users").child("Specialist").child(parcelData?.userId.toString())
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val user = p0.getValue(Users::class.java)
+                        if (user != null) {
+                            forum_owner.text = "By : " + user.name
+                            check = true
+                        }
+                    }
+
+                })
         }
 
-        for (i in 0 until parcelData?.tags!!.size){
+        for (i in 0 until parcelData?.tags!!.size) {
             chip(parcelData.tags[i])
         }
 
-        for (i in 0 until parcelData.hardware!!.size){
+        for (i in 0 until parcelData.hardware!!.size) {
             chip(parcelData.hardware[i])
         }
 
@@ -87,7 +88,7 @@ class ForumDetail : AppCompatActivity() {
         }
     }
 
-    private fun chip(tagName: String){
+    private fun chip(tagName: String) {
         val chip = Chip(this)
         chip.text = tagName
         chip.textSize = 12f
@@ -104,21 +105,22 @@ class ForumDetail : AppCompatActivity() {
         chipGroup.addView(chip)
     }
 
-    private fun countComments(forumId: String){
-        database.child("Comments").orderByChild("forumId").equalTo(forumId).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+    private fun countComments(forumId: String) {
+        database.child("Comments").orderByChild("forumId").equalTo(forumId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                totalComments.text = p0.childrenCount.toString()
-            }
+                override fun onDataChange(p0: DataSnapshot) {
+                    totalComments.text = p0.childrenCount.toString()
+                }
 
-        })
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == COUNT_COMMENT){
+        if (requestCode == COUNT_COMMENT) {
             val parcelData: Forum? = intent.getParcelableExtra(Companion.data)
             countComments(parcelData?.id.toString())
         }

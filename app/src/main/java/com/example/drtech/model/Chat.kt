@@ -1,6 +1,6 @@
 package com.example.drtech.model
 
-data class Chat (
+data class Chat(
     val id: String? = "",
     val senderId: String? = "",
     val senderName: String? = "",

@@ -2,7 +2,6 @@ package com.example.drtech.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -20,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_comments.*
 
 
 class Comments : AppCompatActivity() {
-    companion object{
+    companion object {
         const val FORUM_ID = "FORUM_ID"
     }
 
@@ -39,7 +38,7 @@ class Comments : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
-        if(auth.currentUser == null){
+        if (auth.currentUser == null) {
             bgComment.visibility = View.GONE
             sendComment.visibility = View.GONE
             commentText.visibility = View.GONE
@@ -56,7 +55,10 @@ class Comments : AppCompatActivity() {
             )
         )
 
-        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(CommentViewModel::class.java)
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(CommentViewModel::class.java)
         intent?.getStringExtra(FORUM_ID)?.let { mainViewModel.showComments(it) }
         showLoading(true)
         mainViewModel.getComments().observe(this, Observer { commentItems ->
@@ -76,7 +78,7 @@ class Comments : AppCompatActivity() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     val user = p0.getValue(Users::class.java)
-                    if(user != null){
+                    if (user != null) {
                         name = user.name.toString()
                         check = true
                     }
@@ -84,7 +86,7 @@ class Comments : AppCompatActivity() {
                 }
             })
 
-        if(check == false){
+        if (check == false) {
             database.child("Users").child("Specialist").child(auth.currentUser?.uid.toString())
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
@@ -92,7 +94,7 @@ class Comments : AppCompatActivity() {
 
                     override fun onDataChange(p0: DataSnapshot) {
                         val user = p0.getValue(Users::class.java)
-                        if(user != null){
+                        if (user != null) {
                             name = user.name.toString()
                             check = true
                         }
@@ -113,20 +115,26 @@ class Comments : AppCompatActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.slide_from_top,R.anim.slide_in_top)
+        overridePendingTransition(R.anim.slide_from_top, R.anim.slide_in_top)
     }
 
-    private fun sendComment(name: String){
+    private fun sendComment(name: String) {
         val id = database.push().key
-        val data = Comment(id, name, commentText.text.toString(), intent.getStringExtra(FORUM_ID), auth.currentUser?.uid.toString())
+        val data = Comment(
+            id,
+            name,
+            commentText.text.toString(),
+            intent.getStringExtra(FORUM_ID),
+            auth.currentUser?.uid.toString()
+        )
         database.child("Comments").child(id.toString()).setValue(data)
         adapter.notifyDataSetChanged()
     }
 
-    private fun showLoading(state: Boolean){
-        if (state){
+    private fun showLoading(state: Boolean) {
+        if (state) {
             progressBar.visibility = View.VISIBLE
-        }else{
+        } else {
             progressBar.visibility = View.GONE
         }
     }

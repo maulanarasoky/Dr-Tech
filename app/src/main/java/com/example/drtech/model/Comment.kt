@@ -1,6 +1,6 @@
 package com.example.drtech.model
 
-data class Comment (
+data class Comment(
     val id: String? = "",
     val name: String? = "",
     val comment: String? = "",

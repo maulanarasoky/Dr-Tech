@@ -1,23 +1,22 @@
 package com.example.drtech.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.drtech.R
 import com.example.drtech.adapter.ForumsList
-import com.example.drtech.model.Forum
 import com.example.drtech.viewmodel.SearchViewModel
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_search.*
 
 class Search : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val TAGS = "TAGS"
     }
 
@@ -38,7 +37,10 @@ class Search : AppCompatActivity() {
 
         searchWhat.text = "Menampilkan \'${intent.getStringExtra(TAGS)}\'..."
 
-        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchViewModel::class.java)
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(SearchViewModel::class.java)
         intent?.getStringExtra(TAGS)?.let { mainViewModel.searchForum(it) }
         showLoading(true)
         mainViewModel.getForums().observe(this, Observer { forumItems ->
@@ -56,10 +58,10 @@ class Search : AppCompatActivity() {
         }
     }
 
-    private fun showLoading(state: Boolean){
-        if (state){
+    private fun showLoading(state: Boolean) {
+        if (state) {
             progressBar.visibility = View.VISIBLE
-        }else{
+        } else {
             progressBar.visibility = View.GONE
         }
     }
