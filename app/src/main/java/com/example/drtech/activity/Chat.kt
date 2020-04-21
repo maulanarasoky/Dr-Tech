@@ -55,7 +55,9 @@ class Chat : AppCompatActivity() {
         mainViewModel.getDataChats().observe(this, Observer { chatList ->
             adapter = ChatData(chatList, senderName[0])
             chatRecyclerView.adapter = adapter
-            chatRecyclerView.smoothScrollToPosition(chatList.size - 1)
+            if(chatList.size > 0){
+                chatRecyclerView.smoothScrollToPosition(chatList.size - 1)
+            }
             Log.d("WEWEW", chatList.toString())
         })
 
